@@ -1,11 +1,3 @@
-#Copyright (C) 和泉かやと. 著作權所有，並保留一切權利。
-
-# -*- coding: utf-8 -*-
-# @Time    : 2022/6/18
-# @Author  : Gallen Wang
-# @File    : bot.py
-
-
 import asyncio
 import discord
 from discord.ext import commands
