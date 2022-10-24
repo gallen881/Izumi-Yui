@@ -4,8 +4,6 @@ from discord.ext import commands
 import os
 import function
 
-data = function.open_json('data.json')
-
 bot = commands.Bot(command_prefix='-', intents=discord.Intents.all())
 
 async def main():
@@ -13,7 +11,7 @@ async def main():
     @bot.event
     async def on_ready():
         function.print_time('Bot is Ready')
-        await bot.change_presence(status=discord.Status.online, activity=discord.Game(data['playinggame']))
+        await bot.change_presence(status=discord.Status.online, activity=discord.Game(function.open_json('data.json')['playinggame']))
 
 
     @bot.command()
@@ -36,13 +34,13 @@ async def main():
 
     @bot.command()
     async def version(ctx):
-        await ctx.send(f"Version: {data['version']}")
+        await ctx.send(f"Version: {function.open_json('data.json')['version']}")
 
     async with bot:
         for file in os.listdir('./cmds'):
             if file.endswith('.py'):
                 await bot.load_extension(f'cmds.{file[:-3]}')
                 function.print_time(f'{file} loaded successfully')
-        await bot.start(data['token'])
+        await bot.start(function.open_json('data.json')['token'])
 
 asyncio.run(main())

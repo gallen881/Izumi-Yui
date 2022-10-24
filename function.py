@@ -1,9 +1,9 @@
 def open_json(fileName):
     import json
     if fileName != '':
-        strList = fileName.split(".")
-        if strList[len(strList)-1].lower() == "json":
-            with open(fileName, mode = 'r', encoding = "utf-8") as file:
+        strList = fileName.split('.')
+        if strList[len(strList)-1].lower() == 'json':
+            with open(fileName, mode = 'r', encoding = 'utf-8') as file:
                 data = json.loads(file.read())
                 file.close()
                 return data
@@ -11,9 +11,9 @@ def open_json(fileName):
 def write_json(fileName, enter):
     import json
     if fileName != '':
-        strList = fileName.split(".")
-        if strList[len(strList)-1].lower() == "json":
-            with open(fileName, mode = 'w', encoding = "utf-8") as file:
+        strList = fileName.split('.')
+        if strList[len(strList)-1].lower() == 'json':
+            with open(fileName, mode = 'w', encoding = 'utf-8') as file:
                 json.dump(enter, file)
                 file.close()
 

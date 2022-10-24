@@ -1,14 +1,7 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-
 import random
 import function
 
-data = function.open_json("./cmds/tools_data/bullshit/bullshit.json")
-famous = data["famous"] # a 代表前面墊話，b代表後面墊話
-before = data["before"] # 在名人名言前面弄點廢話
-after = data['after']  # 在名人名言後面弄點廢話
-bosh = data['bosh'] # 代表文章主要廢話來源
+DATA = function.open_json("./cmds/tools_data/bullshit/bullshit.json")
 
 def shuffle(l):
     pool = list(l) * 2
@@ -17,12 +10,8 @@ def shuffle(l):
         for element in pool:
             yield element
 
-next_bosh = shuffle(bosh)
-next_famous = shuffle(famous)
-
 def form_famous():
-    global next_famous
-    return next(next_famous).replace("a", random.choice(before)).replace("b", random.choice(after))
+    return 
 
 def generate(xx, length):
     for x in xx:
@@ -30,10 +19,14 @@ def generate(xx, length):
         while ( len(tmp) < length ) :
             rd = random.randint(0,100)
             if rd < 5:
-                tmp += "\r\n"
-            elif rd < 19 :
-                tmp += form_famous()
+                tmp += "\n\n"
+            elif rd < 19:
+                tmp += next(shuffle(DATA["famous"])).replace("a", random.choice(DATA["before"])).replace("b", random.choice(DATA['after']))
+            elif rd < 40:
+                tmp += next(shuffle(DATA['bosh_comma'])) + next(shuffle(DATA['bosh']))
+            elif rd < 98:
+                tmp += next(shuffle(DATA['bosh']))
             else:
-                tmp += next(next_bosh)
+                tmp += next(shuffle(DATA['bosh_colon'])) + next(shuffle(DATA['bosh_comma'])) + next(shuffle(DATA['bosh']))
         tmp = tmp.replace("x",xx)
         return(tmp)
