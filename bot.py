@@ -34,7 +34,11 @@ async def main():
 
     @bot.command()
     async def info(ctx):
-        await ctx.send(f'Version: {function.open_json("data.json")["version"]}\nGitHub: {function.open_json("data.json")["github"]}')
+        data = function.open_json("data.json")
+        text =''
+        for i, features in enumerate(data['new_features']):
+            text += f'    *{i + 1}. {features}*\n'
+        await ctx.send(f'**Version:** *{data["version"]}*\n**New features:** \n{text}**GitHub:** *{data["github"]}*')
 
     async with bot:
         for file in os.listdir('./cmds'):
