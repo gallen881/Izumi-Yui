@@ -33,8 +33,8 @@ async def main():
         function.print_time(f'{extension}.py reloaded successfully')
 
     @bot.command()
-    async def version(ctx):
-        await ctx.send(f"Version: {function.open_json('data.json')['version']}")
+    async def info(ctx):
+        await ctx.send(f'Version: {function.open_json("data.json")["version"]}\nGitHub: {function.open_json("data.json")["github"]}')
 
     async with bot:
         for file in os.listdir('./cmds'):
