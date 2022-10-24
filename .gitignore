@@ -1,3 +1,4 @@
 cmds/acg_data/urls.json
+cmds/tools_data/img/*.png
 data.json
 *__pycache__
