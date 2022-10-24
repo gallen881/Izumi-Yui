@@ -1,5 +1,4 @@
 from functools import reduce
-import subprocess
 import m3u8
 import requests
 from bs4 import BeautifulSoup
