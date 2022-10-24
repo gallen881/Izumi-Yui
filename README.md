@@ -1,2 +1,2 @@
 # 和泉ゆい
-This is a discord bot
+She is a discord bot, which is still in beta.
