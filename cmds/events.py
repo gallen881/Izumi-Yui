@@ -9,7 +9,6 @@ import cmds.acg_data.data as d
 class Events(Cog_Extension):
     @commands.Cog.listener()
     async def on_message(self, message):
-        function.print_time(f'{message.author} sent {message.content}')
         if message.author == self.bot.user:
             return
 
