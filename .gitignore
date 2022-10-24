@@ -1,2 +1,3 @@
 cmds/acg_data/urls.json
 data.json
+*__pycache__
