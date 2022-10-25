@@ -15,14 +15,14 @@ def form_famous():
 
 def generate(xx, length):
     for x in xx:
-        tmp = str()
+        tmp = '    '
         while ( len(tmp) < length ) :
             rd = random.randint(0,100)
-            if rd < 5:
-                tmp += "\n\n"
-            elif rd < 19:
+            if rd < 10:
+                tmp += '\n\n    '
+            elif rd < 24:
                 tmp += next(shuffle(DATA["famous"])).replace("a", random.choice(DATA["before"])).replace("b", random.choice(DATA['after']))
-            elif rd < 40:
+            elif rd < 45:
                 tmp += next(shuffle(DATA['bosh_comma'])) + next(shuffle(DATA['bosh']))
             elif rd < 98:
                 tmp += next(shuffle(DATA['bosh']))
