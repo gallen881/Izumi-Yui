@@ -63,6 +63,11 @@ class ACG(Cog_Extension):
             for anime in r[day]:
                 text += f'''{anime['name']} (lastest:{anime['update'][5:-3]})\n<{anime['url']}>\n\n'''
             await ctx.send(text)
+
+    @myself.command()
+    async def anime(self, ctx, url):
+        r = myself.Myself.animate_total_info(url)
+        await ctx.send(f'**{r["name"]}：**    *`{r["animate_type"]}`*\n\n`{r["synopsis"]}`\n\n*作者：{r["author"]}*\n*{r["premiere_date"]} 首播*\n*{r["episode"]}*\n\n{r["official_website"]}')
             
 
 async def setup(bot):
