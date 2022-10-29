@@ -18,7 +18,7 @@ class ACG(Cog_Extension):
         sent_msg = await ctx.send(sent_url)
         await sent_msg.add_reaction('\u274C')
         function.print_time(f'Send {sent_url}')
-        d(sent_msg, sent_url)
+        d.url_data(sent_msg, sent_url)
         
     @pinterest.command()
     async def scraper(self, ctx, amount):
