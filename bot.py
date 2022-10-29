@@ -1,5 +1,7 @@
 # import keep_alive
 
+VERSION = '5.0.1'
+
 import asyncio
 import discord
 from discord.ext import commands
@@ -40,11 +42,11 @@ async def main():
         text =''
         for i, features in enumerate(data['new_features']):
             text += f'    *{i + 1}. {features}*\n'
-        await ctx.send(f'**Version:** *{data["version"]}*\n**New features:** \n{text}**GitHub:** *{data["github"]}*')
+        await ctx.send(f'**Version:** *{VERSION}*\n**New features:** \n{text}**GitHub:** *{data["github"]}*')
 
     async with bot:
         for file in os.listdir('./cmds'):
-            if file.endswith('.py'):
+            if file.endswith('.py') and file != 'data.py':
                 await bot.load_extension(f'cmds.{file[:-3]}')
                 function.print_time(f'{file} loaded successfully')
         # keep_alive.keep_alive()
