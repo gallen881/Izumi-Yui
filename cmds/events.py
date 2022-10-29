@@ -3,13 +3,23 @@ from core.classes import Cog_Extension
 import random
 import function
 import cmds.event_data.form_w as fw
-import cmds.acg_data.data as d
+import cmds.acg_data.data as ad
+from chatterbot import ChatBot
+from chatterbot.trainers import ChatterBotCorpusTrainer
+
 
 
 class Events(Cog_Extension):
+    langs = ['english', 'chinese', 'japanese']
+    chatbot = {}
+    for lang in langs:
+        chatbot[lang] = ChatBot(lang, database_uri=f'sqlite:///cmds/talk_data/{lang}.database')
+        ChatterBotCorpusTrainer(chatbot[lang]).train(f'chatterbot.corpus.{lang}')
+        function.print_time(f'Training {lang} done')
+
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author == self.bot.user:
+        if message.author == self.bot.user or message.content.startswith('-'):
             return
 
         data = function.open_json('./cmds/event_data/www.json')
@@ -33,21 +43,25 @@ class Events(Cog_Extension):
                     await ch.send(f'*{message.author.name}#{message.author.discriminator} sent (from {message.channel})*')
                     await ch.send(attachment)
 
-                
+        data = function.open_json('./cmds/talk_data/talk.json')
+        if str(message.channel.id) in data.keys():
+            await message.channel.typing()
+            await message.channel.send(self.chatbot[data[str(message.channel.id)]].get_response(message.content))
+
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         if payload.user_id != self.bot.user.id:
-            if payload.emoji.name == '\u274C' and payload.message_id == d.msg.id:
-                await d.msg.delete()
+            if payload.emoji.name == '\u274C' and payload.message_id == ad.url_data.msg.id:
+                await ad.url_data.msg.delete()
                 urls = function.open_json('cmds/acg_data/urls.json')
-                urls['pinterest'].remove(d.url)
-                urls['nopinterest'].append(d.url)
+                urls['pinterest'].remove(ad.url_data.url)
+                urls['nopinterest'].append(ad.url_data.url)
                 function.write_json('cmds/acg_data/urls.json', urls)
 
                 await self.bot.get_channel(payload.channel_id).send('Deleted picture successfully')
 
-                function.print_time(f'{payload.member} deleted {d.url} successfully')
+                function.print_time(f'{payload.member} deleted {ad.url_data.url} successfully')
 
             
             # 
