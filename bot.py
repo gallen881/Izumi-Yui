@@ -1,4 +1,4 @@
-# import keep_alive
+import keep_alive
 
 VERSION = '5.0.1'
 
@@ -49,7 +49,7 @@ async def main():
             if file.endswith('.py') and file != 'data.py':
                 await bot.load_extension(f'cmds.{file[:-3]}')
                 function.print_time(f'{file} loaded successfully')
-        # keep_alive.keep_alive()
+        keep_alive.keep_alive()
         await bot.start(function.open_json('data.json')['token'])
 
 asyncio.run(main())
