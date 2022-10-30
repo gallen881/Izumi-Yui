@@ -10,7 +10,7 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 
 
 class Events(Cog_Extension):
-    langs = ['english', 'chinese', 'japanese']
+    langs = ['english', 'chinese', 'japanese', 'self']
     chatbot = {}
     for lang in langs:
         chatbot[lang] = ChatBot(lang, database_uri=f'sqlite:///cmds/talk_data/{lang}.database')
@@ -46,7 +46,9 @@ class Events(Cog_Extension):
         data = function.open_json('./cmds/talk_data/talk.json')
         if str(message.channel.id) in data.keys():
             await message.channel.typing()
-            await message.channel.send(self.chatbot[data[str(message.channel.id)]].get_response(message.content))
+            responce = self.chatbot[data[str(message.channel.id)]].get_response(message.content)
+            await message.reply(responce)
+            function.print_time(f'{message.author} sent {message.content} bot replied {responce}')
 
 
     @commands.Cog.listener()
