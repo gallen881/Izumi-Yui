@@ -17,7 +17,7 @@ pint>=0.8.1
 pymongo>=3.3,<4.0
 twine
 twython
-spacy>=2.1,<2.2
+spacy
 sphinx>=3.0,<3.1
 sphinx_rtd_theme
 pyyaml>=5.3,<5.4
