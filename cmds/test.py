@@ -21,8 +21,9 @@ class Test(Cog_Extension):
             function.write_json('./cmds/event_data/emoji_role.json', dict)
 
     @commands.command()
-    async def oiwriouwev(self, ctx):
-        pass
+    async def tell(self, ctx):
+        await ctx.send('革命性的時代已經到來，放下包袱，踏上旅程吧')
+        await ctx.remove
             
 
 async def setup(bot):
