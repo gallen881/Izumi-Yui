@@ -62,14 +62,14 @@ class Music(Cog_Extension):
     async def play(self, ctx, url):
         try :
             voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
-
+            print(voice_client)
             async with ctx.typing():
                 filename = await YTDLSource.from_url(url, loop=self.bot.loop)
                 print(1)
                 voice_client.play(discord.FFmpegPCMAudio(source=filename))
             await ctx.send(f'**Now playing: ** `{filename}`')
         except:
-            await ctx.send("I am not connected to a voice channel.")
+            pass
 
 
 async def setup(bot):
