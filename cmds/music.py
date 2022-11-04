@@ -35,7 +35,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.url = ""
 
     @classmethod
-    async def from_url(cls, url, *, loop=None, stream=False):
+    async def from_url(self, url, *, loop=None, stream=False):
         loop = loop or asyncio.get_event_loop()
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
         if 'entries' in data:
@@ -64,7 +64,7 @@ class Music(Cog_Extension):
             voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
             print(voice_client)
             async with ctx.typing():
-                filename = await YTDLSource.from_url(url, loop=self.bot.loop)
+                filename = await YTDLSource.from_url(url)
                 print(1)
                 voice_client.play(discord.FFmpegPCMAudio(source=filename))
             await ctx.send(f'**Now playing: ** `{filename}`')
