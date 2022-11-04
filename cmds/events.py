@@ -10,12 +10,12 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 
 
 class Events(Cog_Extension):
-    langs = ['english', 'chinese', 'japanese', 'self']
+    '''langs = ['english', 'chinese', 'japanese', 'self']
     chatbot = {}
     for lang in langs:
         chatbot[lang] = ChatBot(lang, database_uri=f'sqlite:///cmds/talk_data/{lang}.database')
         ChatterBotCorpusTrainer(chatbot[lang]).train(f'chatterbot.corpus.{lang}')
-        function.print_time(f'Training {lang} done')
+        function.print_time(f'Training {lang} done')'''
 
     @commands.Cog.listener()
     async def on_message(self, message):
