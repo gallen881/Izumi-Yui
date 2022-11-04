@@ -60,9 +60,6 @@ class Music(Cog_Extension):
 
     @commands.command()
     async def play(self, ctx, url):
-        if not self.bot.voice:
-            channel = ctx.message.author.voice.channel
-            await channel.connect()
         try :
             voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
             print(voice_client)
