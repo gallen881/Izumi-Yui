@@ -45,9 +45,11 @@ class Events(Cog_Extension):
 
         data = function.open_json('./cmds/talk_data/talk.json')
         if str(message.channel.id) in data.keys():
-            await message.channel.typing()
-            responce = self.chatbot[data[str(message.channel.id)]].get_response(message.content)
-            await message.send(responce)
+            async with message.channel.typing():
+                print(12)
+                responce = self.chatbot[data[str(message.channel.id)]].get_response(message.content)
+                print(responce)
+                await message.channel.send(responce)
             function.print_time(f'{message.author} sent {message.content} bot replied {responce}')
 
 
