@@ -4,6 +4,7 @@ data.json
 test.py
 test2.py
 run.bat
+MusicBot/
 *.m4a
 *.webm
 *__pycache__
