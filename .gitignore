@@ -5,4 +5,5 @@ test.py
 test2.py
 run.bat
 *.m4a
+*.webm
 *__pycache__

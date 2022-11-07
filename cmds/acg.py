@@ -7,12 +7,12 @@ import cmds.acg_data.scraper as scraper
 import cmds.acg_data.myself as myself
 
 class ACG(Cog_Extension):
-    @commands.group()
+    @commands.group(aliases=['pin'])
     async def pinterest(self, ctx):
         pass
 
     @pinterest.command()
-    async def picture(self, ctx):
+    async def img(self, ctx):
         url_list = function.open_json('cmds/acg_data/urls.json')['pinterest']
         sent_url = url_list[random.randrange(len(url_list))]
         sent_msg = await ctx.send(sent_url)
@@ -20,28 +20,28 @@ class ACG(Cog_Extension):
         function.print_time(f'Send {sent_url}')
         d.url_data(sent_msg, sent_url)
         
-    @pinterest.command()
+    @pinterest.command(aliases=['sp'])
     async def scraper(self, ctx, amount):
         await ctx.send('Start scraping on Pinterest')
         await ctx.send(f'Add {scraper.pinterest(amount=int(amount)).get_pinterest_urls()} pictures')
 
-    @pinterest.command()
+    @pinterest.command(aliases=['rbm'])
     async def resetbm(self, ctx):
         scraper.pinterest.reset_bookmark
         await ctx.send('Reset Pinterest bookmark successfully')
         function.print_time('Reset Pinterest bookmark successfully')
 
-    @commands.group()
+    @commands.group(aliases=['px'])
     async def pixiv(self, ctx):
         pass
 
-    @pixiv.command()
+    @pixiv.command(aliases=['i', 'pid'])
     async def illust(self, ctx, pid):
         url = scraper.pixiv.get_pixiv_urls_pid(pid)
         for i in range(len(url)):
             await ctx.send(url[i])
 
-    @pixiv.command()
+    @pixiv.command(aliases=['u', 'uid'])
     async def user(self, ctx, uid):
         r = scraper.pixiv.get_pixiv_urls_uid(uid)
         await ctx.send(f'User name: {r[1]}')
@@ -51,11 +51,11 @@ class ACG(Cog_Extension):
                 await ctx.send(url[i])
         function.print_time('Scrape complete')
 
-    @commands.group()
+    @commands.group(aliases=['ms'])
     async def myself(self, ctx):
         pass
 
-    @myself.command()
+    @myself.command(aliases=['w'])
     async def week(self, ctx):
         r = myself.Myself.week_animate()
         for day in r:
@@ -64,7 +64,7 @@ class ACG(Cog_Extension):
                 text += f'''{anime['name']} (lastest:{anime['update'][5:-3]})\n<{anime['url']}>\n\n'''
             await ctx.send(text)
 
-    @myself.command()
+    @myself.command(aliases=['a'])
     async def anime(self, ctx, url):
         r = myself.Myself.animate_total_info(url)
         await ctx.send(f'**{r["name"]}：**    *`{r["animate_type"]}`*\n\n`{r["synopsis"]}`\n\n*作者：{r["author"]}*\n*{r["premiere_date"]} 首播*\n*{r["episode"]}*\n\n{r["official_website"]}')

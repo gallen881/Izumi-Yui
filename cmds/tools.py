@@ -81,7 +81,7 @@ class Tools(Cog_Extension):
                 for text in img.ocr(url, lang):
                     await ctx.reply(text)
                     function.print_time(f'Send {text}')
-    @img.command()
+    @img.command(aliases=['r'])
     async def rotate(self, ctx, angle, url=None):
         for attachment in ctx.message.attachments:
             img.rotate(attachment, float(angle))

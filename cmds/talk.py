@@ -19,5 +19,7 @@ class Talk(Cog_Extension):
         function.write_json('./cmds/talk_data/talk.json', talk)
         function.print_time(f'{ctx.channel}({ctx.channel.id}) chat off')
 
+    
+
 async def setup(bot):
     await bot.add_cog(Talk(bot))

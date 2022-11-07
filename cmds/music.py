@@ -46,31 +46,64 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
 
 class Music(Cog_Extension):
-    def __call__(self, vc):
-        self.vc = vc
+    PlayList = {}
     @commands.command()
     async def join(self, ctx):
         if not ctx.message.author.voice:
             await ctx.send('You is not connected to a voice channel')
-            return
         else:
             channel = ctx.message.author.voice.channel
-        await channel.connect()
+            await channel.connect()
+            function.print_time(f'Join to {channel}({channel.guild}) successfully')
 
 
-    @commands.command()
+    @commands.command(aliases=['p'])
     async def play(self, ctx, url):
-        try :
+        voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
+        if voice_client == None:
+            channel = ctx.message.author.voice.channel
+            await channel.connect()
+            function.print_time(f'Join to {channel}({channel.guild}) successfully')
             voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
-            print(voice_client)
-            async with ctx.typing():
-                filename = await YTDLSource.from_url(url)
-                print(1)
-                voice_client.play(discord.FFmpegPCMAudio(source=filename))
-            await ctx.send(f'**Now playing: ** `{filename}`')
-        except:
-            pass
+        print(1, voice_client)
+
+        c_id = str(ctx.channel.id)
+        if c_id not in self.PlayList.keys():
+            self.PlayList[c_id] = []
+        print(2, c_id,self.PlayList, self.PlayList[c_id])
+
+        async with ctx.typing():
+            filename = await YTDLSource.from_url(url, loop=self.bot.loop)
+        print(3, filename)
+
+        if self.PlayList[c_id] == []:
+            print(4)
+            self.PlayList[c_id] = [filename]
+            print(41)
+            await self.playing(voice_client, c_id)
 
 
+        else:
+            print(55)
+            try:
+                self.PlayList[c_id][len(self.PlayList)] = filename
+                print('tr')
+            except:
+                self.PlayList[c_id].append(filename)
+                print('ex')
+            print(5)
+
+    async def playing(self, voice_client, c_id):
+        voice_client.play(discord.FFmpegPCMAudio(source=self.PlayList[c_id][0]))
+        print('d')
+        del self.PlayList[c_id][0]
+        print('do')
+        
+        self.playing(self, voice_client, c_id)
+
+
+    @commands.command(aliases=['q'])
+    async def queue(self, ctx):
+        await ctx.send(self.PlayList[str(ctx.channel.id)])
 async def setup(bot):
     await bot.add_cog(Music(bot))
