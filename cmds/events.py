@@ -64,44 +64,7 @@ class Events(Cog_Extension):
                 await self.bot.get_channel(payload.channel_id).send('Deleted picture successfully')
 
                 function.print_time(f'{payload.member} deleted {ad.url_data.url} successfully')
-
-            
-            # 
-
-            d = function.open_json('./cmds/event_data/emoji_role.json')
-            print(1)
-            if payload.message_id in d['message_id']:
-                print(2)
-                if payload.emoji.name in d['emoji_role'].keys():
-                    print(3)
-                    guild = self.bot.get_guild(payload.guild_id)
-                    role = guild.get_role(d['emoji_role'][payload.emoji.name])
-                    role2 = guild.get_role(d['emoji_role']['all'])
-                    user = payload.member
-                    print(4)
-                    await user.add_roles(role, role2)
-                    print(5)
-                    function.print_time(f'Add {role} which is in {guild} to {user}')
-
-    @commands.Cog.listener()
-    async def on_raw_reaction_remove(self, payload):
-            d = function.open_json('./cmds/event_data/emoji_role.json')
-            print(1)
-            if payload.message_id in d['message_id']:
-                print(2)
-                if payload.emoji.name in d['emoji_role'].keys():
-                    print(3)
-                    guild = self.bot.get_guild(payload.guild_id)
-                    role = guild.get_role(d['emoji_role'][payload.emoji.name])
-                    role2 = guild.get_role(d['emoji_role']['all'])
-                    user = self.bot.get_user(payload.user_id)
-                    print(4)
-                    print(guild, role, role2, user)
-                    await user.remove_roles(role, role2)
-                    print(5)
-                    function.print_time(f'Remove {role} which is in {guild} to {user}')
-
-            
+         
 
 async def setup(bot):
     await bot.add_cog(Events(bot))
