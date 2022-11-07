@@ -1,1 +1,0 @@
-putty -ssh user@101.3.145.7 -pw alice0727
