@@ -19,7 +19,7 @@ class Tools(Cog_Extension):
     async def bullshit(self, ctx, title, length=int()):
         bullshit = bt.generate(title, length)
         if len(bullshit) > 1994:
-            with open('./cmds/tools_data/bullshit/temp.txt') as file:
+            with open('./cmds/tools_data/bullshit/temp.txt', 'w') as file:
                 file.write(bullshit)
             await ctx.send(file=discord.File('./cmds/tools_data/bullshit/temp.txt'))
         else:
