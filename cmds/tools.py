@@ -18,7 +18,12 @@ class Tools(Cog_Extension):
     @commands.command()
     async def bullshit(self, ctx, title, length=int()):
         bullshit = bt.generate(title, length)
-        await ctx.send(bullshit)
+        if len(bullshit) > 1994:
+            with open('./cmds/tools_data/bullshit/temp.txt') as file:
+                file.write(bullshit)
+            await ctx.send(file=discord.File('./cmds/tools_data/bullshit/temp.txt'))
+        else:
+            await ctx.send(f'```{bullshit}```')
         function.print_time(f'Send {bullshit}')
 
     @commands.command()
