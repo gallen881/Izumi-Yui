@@ -26,6 +26,7 @@ class ACG(Cog_Extension):
         await ctx.send(f'Add {scraper.pinterest(amount=int(amount)).get_pinterest_urls()} pictures')
 
     @pinterest.command(aliases=['rbm'])
+    @commands.is_owner()
     async def resetbm(self, ctx):
         scraper.pinterest.reset_bookmark
         await ctx.send('Reset Pinterest bookmark successfully')

@@ -1,6 +1,6 @@
 import keep_alive
 
-VERSION = '6.0.0'
+VERSION = '6.2.2'
 
 import asyncio
 import discord
@@ -12,6 +12,7 @@ bot = commands.Bot(command_prefix='-', intents=discord.Intents.all())
 
 async def main():
 
+
     @bot.event
     async def on_ready():
         function.print_time('Bot is Ready')
@@ -19,18 +20,21 @@ async def main():
 
 
     @bot.command()
+    @commands.is_owner()
     async def load(ctx, extension):
         await bot.load_extension(f'cmds.{extension}')
         await ctx.send(f'Loaded {extension} successfully')
         function.print_time(f'{extension}.py loaded successfully')
 
     @bot.command()
+    @commands.is_owner()
     async def unload(ctx, extension):
         await bot.unload_extension(f'cmds.{extension}')
         await ctx.send(f'Unloaded {extension} successfully')
         function.print_time(f'{extension}.py unloaded successfully')
 
     @bot.command()
+    @commands.is_owner()
     async def reload(ctx, extension):
         await bot.reload_extension(f'cmds.{extension}')
         await ctx.send(f'Reloaded {extension} successfully')
