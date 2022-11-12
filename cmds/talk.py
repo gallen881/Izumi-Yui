@@ -5,9 +5,12 @@ import function
 class Talk(Cog_Extension):
 
     @commands.command()
-    async def chat(self, ctx, lang):
+    async def chat(self, ctx, lang=True):
         talk = function.open_json('./cmds/talk_data/talk.json')
-        talk[str(ctx.message.channel.id)] = lang
+        if lang:
+            talk[str(ctx.message.channel.id)] = f'local.{str(ctx.channel.id)}'
+        else:
+            talk[str(ctx.message.channel.id)] = lang
         function.write_json('./cmds/talk_data/talk.json', talk)
         function.print_time(f'{ctx.channel}({ctx.channel.id}) chat on')
 
