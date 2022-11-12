@@ -1,7 +1,9 @@
 from discord.ext import commands
 from core.classes import Cog_Extension
-import random
 import function
+import random
+import yaml
+import time
 import cmds.event_data.form_w as fw
 import cmds.acg_data.data as ad
 from chatterbot import ChatBot
@@ -10,12 +12,31 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 
 
 class Events(Cog_Extension):
-    langs = ['english', 'chinese', 'japanese', 'self']
+    langs = ['english', 'chinese', 'japanese', 'self', ]
     chatbot = {}
     for lang in langs:
         chatbot[lang] = ChatBot(lang, database_uri=f'sqlite:///cmds/talk_data/{lang}.database')
         '''ChatterBotCorpusTrainer(chatbot[lang]).train(f'chatterbot.corpus.{lang}')
         function.print_time(f'Training {lang} done')'''
+
+    time_stamp = 0
+
+    @commands.command()
+    @commands.is_owner()
+    async def listen(self, ctx):
+        data = function.open_json('./cmds/event_data/listen.json')
+        if str(ctx.guild.id) in data.keys():
+            data[str(ctx.guild.id)].append(ctx.channel.id)
+
+        else:
+            data[str(ctx.guild.id)] = [ctx.channel.id]
+
+        
+        function.write_json('./cmds/event_data/listen.json', data)
+
+        function.print_time(f'Start to listen on {ctx.channel}({ctx.guild})')
+
+    
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -42,6 +63,39 @@ class Events(Cog_Extension):
                 for attachment in message.attachments:
                     await ch.send(f'*{message.author.name}#{message.author.discriminator} sent (from {message.channel})*')
                     await ch.send(attachment)
+
+
+        data = function.open_json('./cmds/event_data/listen.json')
+        if message.channel.id in data[str(message.guild.id)]:
+            path = f'./chatterbot/chatterbot_corpus/data/local/{str(message.channel.id)}.yml'
+            try:
+                with open(path, 'r', encoding='utf-8') as file:
+                    yml = yaml.safe_load(file)
+                    file.close()
+                existing = True
+            except:
+                yml = {'categories': [str(message.channel.id)], 'conversations': []}
+                existing = False
+
+            now = time.time()
+            if now - self.time_stamp > 1800:
+                yml['conversations'].append([message.content])
+            else:
+                try:
+                    yml['conversations'][-1].append(message.content)
+                except:
+                    yml['conversations'].append([message.content])
+            self.time_stamp = now
+            
+            with open(path, 'w', encoding='utf-8') as file:
+                yaml.dump(yml, file, allow_unicode=True)
+                file.close()
+
+            if existing:
+                function.print_time(f'Add {message.content} to an existing conversation')
+            else:
+                function.print_time(f'Creat a new conversation')
+
 
         data = function.open_json('./cmds/talk_data/talk.json')
         if str(message.channel.id) in data.keys():
