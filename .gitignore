@@ -1,5 +1,6 @@
 cmds/tools_data/img/*.png
 cmds/tools_data/img/lang.csv
+cmds/talk_data/*.database
 chatterbot/chatterbot_corpus/data/self
 chatterbot/chatterbot_corpus/data/local
 data.json
