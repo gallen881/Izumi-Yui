@@ -21,22 +21,6 @@ class Events(Cog_Extension):
 
     time_stamp = 0
 
-    @commands.command()
-    @commands.is_owner()
-    async def listen(self, ctx):
-        data = function.open_json('./cmds/event_data/listen.json')
-        if str(ctx.guild.id) in data.keys():
-            data[str(ctx.guild.id)].append(ctx.channel.id)
-
-        else:
-            data[str(ctx.guild.id)] = [ctx.channel.id]
-
-        
-        function.write_json('./cmds/event_data/listen.json', data)
-
-        function.print_time(f'Start to listen on {ctx.channel}({ctx.guild})')
-
-    
 
     @commands.Cog.listener()
     async def on_message(self, message):
