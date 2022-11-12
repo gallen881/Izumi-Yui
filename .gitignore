@@ -1,5 +1,7 @@
 cmds/tools_data/img/*.png
 cmds/tools_data/img/lang.csv
+chatterbot/chatterbot_corpus/data/self
+chatterbot/chatterbot_corpus/data/local
 data.json
 test.py
 test2.py
