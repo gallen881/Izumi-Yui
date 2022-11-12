@@ -103,6 +103,7 @@ class Music(Cog_Extension):
 
 
     @commands.command(aliases=['q'])
+    @commands.is_owner()
     async def queue(self, ctx):
         await ctx.send(self.PlayList[str(ctx.channel.id)])
 async def setup(bot):
