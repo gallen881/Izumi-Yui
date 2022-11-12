@@ -43,7 +43,7 @@ class Tools(Cog_Extension):
 
     @commands.command()
     async def synce(self, ctx, *ch_ids):
-        data = function.open_json('./cmds/event_data/synchronous_channel.json')
+        data = function.open_json('./cmds/events_data/synchronous_channel.json')
         if str(ctx.channel.id) in data.keys():
             for ch_id in ch_ids:
                 if ch_id not in str(data[str(ctx.channel.id)]):
@@ -55,12 +55,12 @@ class Tools(Cog_Extension):
                 data[str(ctx.channel.id)].append(int(ch_id))
                 await ctx.send(f'Synce {ch_id} successfully')
 
-        function.write_json('./cmds/event_data/synchronous_channel.json', data)
+        function.write_json('./cmds/events_data/synchronous_channel.json', data)
 
 
     @commands.command()
     async def nosynce(self, ctx, *ch_ids):
-        data = function.open_json('./cmds/event_data/synchronous_channel.json')
+        data = function.open_json('./cmds/events_data/synchronous_channel.json')
 
         if str(ctx.channel.id) in data.keys():
             for ch_id in ch_ids:
@@ -68,7 +68,7 @@ class Tools(Cog_Extension):
                     data[str(ctx.channel.id)].remove(int(ch_id))
                     await ctx.send(f'Disable synce to {ch_id} successfully')
 
-        function.write_json('./cmds/event_data/synchronous_channel.json', data)
+        function.write_json('./cmds/events_data/synchronous_channel.json', data)
 
     @commands.group()
     async def img(self, ctx):

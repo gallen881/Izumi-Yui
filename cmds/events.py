@@ -4,7 +4,7 @@ import function
 import random
 import yaml
 import time
-import cmds.event_data.form_w as fw
+import cmds.events_data.form_w as fw
 import cmds.acg_data.data as ad
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
@@ -27,7 +27,7 @@ class Events(Cog_Extension):
         if message.author == self.bot.user or message.content.startswith('-'):
             return
 
-        data = function.open_json('./cmds/event_data/www.json')
+        data = function.open_json('./cmds/events_data/www.json')
         if message.channel.id not in data['noww_id']:
             if message.content in data["w"] or message.content.endswith('w'):
                 rd = random.randrange(10000)
@@ -37,7 +37,7 @@ class Events(Cog_Extension):
                     await message.channel.send(fw.form_w('random'))
 
 
-        data = function.open_json('./cmds/event_data/synchronous_channel.json')
+        data = function.open_json('./cmds/events_data/synchronous_channel.json')
         if str(message.channel.id) in data.keys():
             for c in data[str(message.channel.id)]:
                 ch = self.bot.get_channel(c)
@@ -49,7 +49,7 @@ class Events(Cog_Extension):
                     await ch.send(attachment)
 
 
-        data = function.open_json('./cmds/event_data/listen.json')
+        data = function.open_json('./cmds/events_data/listen.json')
         if message.channel.id in data[str(message.guild.id)]:
             path = f'./chatterbot/chatterbot_corpus/data/local/{str(message.channel.id)}.yml'
             try:
