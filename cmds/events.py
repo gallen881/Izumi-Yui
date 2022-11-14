@@ -58,21 +58,25 @@ class Events(Cog_Extension):
                 existing = False
 
             
+            print(0)
+
             if message.content != '':
                 try:
                     self.time_stamp[str(message.channel.id)]
                 except:
                     self.time_stamp[str(message.channel.id)] = 0
+
                 now = time.time()
-                if now - self.time_stamp > 1800:
+                if now - self.time_stamp[str(message.channel.id)] > 1800:
                     yml['conversations'].append([message.content])
                 else:
                     try:
                         yml['conversations'][-1].append(message.content)
                     except:
                         yml['conversations'].append([message.content])
+
             self.time_stamp[str(message.channel.id)] = now
-            
+
             with open(path, 'w', encoding='utf-8') as file:
                 yaml.dump(yml, file, allow_unicode=True)
                 file.close()
