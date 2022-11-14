@@ -2,7 +2,13 @@ from discord.ext import commands
 from core.classes import Cog_Extension
 import function
 
+from chatterbot import ChatBot
+from chatterbot.trainers import ChatterBotCorpusTrainer
+
 class Talk(Cog_Extension):
+
+
+    chatbot = {}
 
 
     @commands.command()
@@ -10,23 +16,44 @@ class Talk(Cog_Extension):
     async def listen(self, ctx):
         data = function.open_json('./cmds/events_data/listen.json')
         if str(ctx.guild.id) in data.keys():
-            data[str(ctx.guild.id)].append(ctx.channel.id)
+            if ctx.channel.id not in data[str(ctx.guild.id)]:
+                data[str(ctx.guild.id)].append(ctx.channel.id)
+                write = True
+            else:
+                write = False
         else:
             data[str(ctx.guild.id)] = [ctx.channel.id]
-        function.write_json('./cmds/events_data/listen.json', data)
+            write = True
+        
+        if write:
+            function.write_json('./cmds/events_data/listen.json', data)
+            function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Start to listen on')
 
-        function.print_time(f'Start to listen on {ctx.channel}({ctx.guild})')
+
+    @commands.command()
+    async def nolisten(self, ctx):
+        data = function.open_json('./cmds/events_data/listen.json')
+        try:
+            data[str(ctx.guild.id)].remove(ctx.channel.id)
+        except:
+            pass
+
+        function.write_json('./cmds/events_data/listen.json', data)
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Stop listening')
+
 
         
     @commands.command()
-    async def chat(self, ctx, lang=True):
+    async def chat(self, ctx, lang=''):
         talk = function.open_json('./cmds/talk_data/talk.json')
-        if lang:
-            talk[str(ctx.message.channel.id)] = f'local.{str(ctx.channel.id)}'
+        if lang == '':
+            talk[str(ctx.channel.id)] = f'local.{ctx.channel.id}'
+            lang = f'local.{ctx.channel.id}'
         else:
-            talk[str(ctx.message.channel.id)] = lang
+            talk[str(ctx.channel.id)] = lang
         function.write_json('./cmds/talk_data/talk.json', talk)
-        function.print_time(f'{ctx.channel}({ctx.channel.id}) chat on')
+        self.chatbot[lang] = ChatBot(lang, database_uri=f'sqlite:///cmds/talk_data/{lang}.database')
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Chat on')
 
     
     @commands.command()
@@ -34,7 +61,15 @@ class Talk(Cog_Extension):
         talk = function.open_json('./cmds/talk_data/talk.json')
         del talk[str(ctx.message.channel.id)]
         function.write_json('./cmds/talk_data/talk.json', talk)
-        function.print_time(f'{ctx.channel}({ctx.channel.id}) chat off')
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Chat off')
+
+
+    @commands.command()
+    @commands.is_owner()
+    async def train(self, ctx, lang=''):
+        if lang == '':
+            lang = f'local.{ctx.channel.id}'
+        ChatterBotCorpusTrainer(self.chatbot[lang]).train(f'chatterbot.corpus.{lang}')
 
 
     

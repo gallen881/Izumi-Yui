@@ -6,18 +6,14 @@ import yaml
 import time
 import cmds.events_data.form_w as fw
 import cmds.acg_data.data as ad
+from cmds.talk import Talk as CmdsTalk
 from chatterbot import ChatBot
-from chatterbot.trainers import ChatterBotCorpusTrainer
+
 
 
 
 class Events(Cog_Extension):
-    langs = ['english', 'chinese', 'japanese', 'self', ]
-    chatbot = {}
-    for lang in langs:
-        chatbot[lang] = ChatBot(lang, database_uri=f'sqlite:///cmds/talk_data/{lang}.database')
-        '''ChatterBotCorpusTrainer(chatbot[lang]).train(f'chatterbot.corpus.{lang}')
-        function.print_time(f'Training {lang} done')'''
+
 
     time_stamp = 0
 
@@ -62,13 +58,14 @@ class Events(Cog_Extension):
                 existing = False
 
             now = time.time()
-            if now - self.time_stamp > 1800:
-                yml['conversations'].append([message.content])
-            else:
-                try:
-                    yml['conversations'][-1].append(message.content)
-                except:
+            if message.content != '':
+                if now - self.time_stamp > 1800:
                     yml['conversations'].append([message.content])
+                else:
+                    try:
+                        yml['conversations'][-1].append(message.content)
+                    except:
+                        yml['conversations'].append([message.content])
             self.time_stamp = now
             
             with open(path, 'w', encoding='utf-8') as file:
@@ -76,17 +73,17 @@ class Events(Cog_Extension):
                 file.close()
 
             if existing:
-                function.print_time(f'Add {message.content} to an existing conversation')
+                function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'Add "{message.content}" to an existing conversation')
             else:
-                function.print_time(f'Creat a new conversation')
+                function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'Add "{message.content}" to a new conversation')
 
 
         data = function.open_json('./cmds/talk_data/talk.json')
         if str(message.channel.id) in data.keys():
             async with message.channel.typing():
-                responce = self.chatbot[data[str(message.channel.id)]].get_response(message.content)
+                responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
                 await message.channel.send(responce)
-            function.print_time(f'{message.author} sent {message.content} bot replied {responce}')
+            function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'"{message.content}" bot replied "{responce}"')
 
 
     @commands.Cog.listener()
@@ -101,7 +98,7 @@ class Events(Cog_Extension):
 
                 await self.bot.get_channel(payload.channel_id).send('Deleted picture successfully')
 
-                function.print_time(f'{payload.member} deleted {ad.url_data.url} successfully')
+                function.print_detail(memo='INFO',user=payload.member, guild=payload.member.guild, channel=self.bot.get_channel(payload.channel_id), obj=f'{payload.member} deleted {ad.url_data.url} successfully')
          
 
 async def setup(bot):
