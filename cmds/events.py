@@ -15,7 +15,7 @@ from chatterbot import ChatBot
 class Events(Cog_Extension):
 
 
-    time_stamp = 0
+    time_stamp = {}
 
 
     @commands.Cog.listener()
@@ -57,8 +57,13 @@ class Events(Cog_Extension):
                 yml = {'categories': [str(message.channel.id)], 'conversations': []}
                 existing = False
 
-            now = time.time()
+            
             if message.content != '':
+                try:
+                    self.time_stamp[str(message.channel.id)]
+                except:
+                    self.time_stamp[str(message.channel.id)] = 0
+                now = time.time()
                 if now - self.time_stamp > 1800:
                     yml['conversations'].append([message.content])
                 else:
@@ -66,7 +71,7 @@ class Events(Cog_Extension):
                         yml['conversations'][-1].append(message.content)
                     except:
                         yml['conversations'].append([message.content])
-            self.time_stamp = now
+            self.time_stamp[str(message.channel.id)] = now
             
             with open(path, 'w', encoding='utf-8') as file:
                 yaml.dump(yml, file, allow_unicode=True)
