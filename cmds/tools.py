@@ -18,9 +18,12 @@ class Tools(Cog_Extension):
 
     
     @commands.command()
-    async def say(self, ctx, message):
-        await ctx.send(message)
-        function.print_detail(memo='INFO', user=ctx.author, guild=ctx.guild, channel=ctx.channel, obj=f'Send "{message}"')
+    async def say(self, ctx, *messages):
+        text = ''
+        for message in messages:
+            text += message + ' '
+        await ctx.send(text)
+        function.print_detail(memo='INFO', user=ctx.author, guild=ctx.guild, channel=ctx.channel, obj=f'Send "{text}"')
 
 
     @commands.command()
