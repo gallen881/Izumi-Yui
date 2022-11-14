@@ -7,6 +7,7 @@ data.json
 test.py
 test2.py
 run.bat
+ssh.bat
 MusicBot/
 *.m4a
 *.webm
