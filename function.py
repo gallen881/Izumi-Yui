@@ -66,7 +66,7 @@ def print_detail(memo='', user=None, guild=None, channel=None, obj=None) -> None
         return string
  
 
-    print(f'{colorama.Style.DIM}[{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}]{colorama.Style.RESET_ALL}{mcolor}[{fill(memo, 5)}]{colorama.Style.RESET_ALL}{colorama.Fore.BLUE}[{fill(user.name + user.discriminator, 20)}({fill(user.id, 19)})][{fill(guild.name, 20)}({fill(guild.id, 19)}][{fill(channel.name, 20)}({fill(channel.id, 19)})]{colorama.Style.RESET_ALL}\n{obj}\n')
+    print(f'{colorama.Style.DIM}[{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}]{colorama.Style.RESET_ALL}{mcolor}[{fill(memo, 5)}]{colorama.Style.RESET_ALL}{colorama.Fore.BLUE}[{fill(f"{user.name}#{user.discriminator}", 20)}({fill(user.id, 19)})][{fill(guild.name, 20)}({fill(guild.id, 19)}][{fill(channel.name, 20)}({fill(channel.id, 19)})]{colorama.Style.RESET_ALL}\n{obj}\n')
 
 
 def split_str_to_list(text: str, size: int) -> list:
