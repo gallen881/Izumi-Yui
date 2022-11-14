@@ -19,11 +19,12 @@ class Tools(Cog_Extension):
     
     @commands.command()
     async def say(self, ctx, *messages):
-        text = ''
+        texts = ''
         for message in messages:
-            text += message + ' '
-        await ctx.send(text)
-        function.print_detail(memo='INFO', user=ctx.author, guild=ctx.guild, channel=ctx.channel, obj=f'Send "{text}"')
+            texts += message + ' '
+        for text in function.split_str_to_list(texts, 2000):
+            await ctx.send(text)
+            function.print_detail(memo='INFO', user=ctx.author, guild=ctx.guild, channel=ctx.channel, obj=f'Send "{text}"')
 
 
     @commands.command()
