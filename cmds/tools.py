@@ -11,9 +11,17 @@ class Tools(Cog_Extension):
     async def ping(self, ctx):
         await ctx.send(f'ping: {self.bot.latency * 1000} (ms)')
 
+
     @commands.command()
     async def getchannelid(self, ctx):
         await ctx.send(f'This channel id is {ctx.channel.id}')
+
+    
+    @commands.command()
+    async def say(self, ctx, message):
+        await ctx.send(message)
+        function.print_detail(memo='INFO', user=ctx.author, guild=ctx.guild, channel=ctx.channel, obj=f'Send "{message}"')
+
 
     @commands.command()
     async def bullshit(self, ctx, title: str, length: int):
