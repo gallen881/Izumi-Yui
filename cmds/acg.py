@@ -17,7 +17,7 @@ class ACG(Cog_Extension):
         sent_url = url_list[random.randrange(len(url_list))]
         sent_msg = await ctx.send(sent_url)
         await sent_msg.add_reaction('\u274C')
-        function.print_time(f'Send {sent_url}')
+        function.print_detail(memo='INFO',user=ctx.auther, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {sent_url}')
         d.url_data(sent_msg, sent_url)
         
     @pinterest.command(aliases=['sp'])
@@ -30,7 +30,7 @@ class ACG(Cog_Extension):
     async def resetbm(self, ctx):
         scraper.pinterest.reset_bookmark
         await ctx.send('Reset Pinterest bookmark successfully')
-        function.print_time('Reset Pinterest bookmark successfully')
+        function.print_detail(memo='INFO',user=ctx.auther, guild=ctx.guild, channel=ctx.message.channel, obj='Reset Pinterest bookmark successfully')
 
     @commands.group(aliases=['px'])
     async def pixiv(self, ctx):
@@ -50,7 +50,7 @@ class ACG(Cog_Extension):
             url = scraper.pixiv.get_pixiv_urls_pid(key)
             for i in range(len(url)):
                 await ctx.send(url[i])
-        function.print_time('Scrape complete')
+        function.print_detail(memo='INFO',user=ctx.auther, guild=ctx.guild, channel=ctx.message.channel, obj='Scrape complete')
 
     @commands.group(aliases=['ms'])
     async def myself(self, ctx):

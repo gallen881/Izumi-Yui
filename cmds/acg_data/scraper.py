@@ -26,7 +26,7 @@ class pinterest:
         image_urls = []
         times = 0
         rtimes = 0
-        function.print_time('Start scraping on Pinterest')
+        function.print_detail(memo='INFO', obj='Start scraping on Pinterest')
         while True:
             r = requests.get(self.url, params={"source_url": f"/search/pins/?q={urllib.parse.quote(self.search_keyword)}", "data": self.image_data()})
             jsonData = json.loads(r.content)
@@ -42,7 +42,7 @@ class pinterest:
 
             if len(image_urls) > self.amount or times >= self.amount * 7 or rtimes == 2:
                 print(image_urls)
-                function.print_time(f'Add {len(image_urls)} pictures')
+                function.print_detail(memo='INFO', obj=f'Add "{len(image_urls)}" pictures')
                 self.jdata['pinterest'].extend(image_urls)
                 function.write_json(self.json_path, self.jdata)
                 break
@@ -51,27 +51,27 @@ class pinterest:
                     self.bookmark = resource_response["bookmark"]
                 except:
                     self.reset_bookmark()
-                    function.print_time('Reset Pinterest bookmark')
+                    function.print_detail(memo='INFO', obj='Reset Pinterest bookmark')
                     rtimes += 1
-                function.print_time(f'about {len(image_urls) / self.amount * 100}%')
+                function.print_detail(memo='COMPLETENESS', obj=f'About {len(image_urls) / self.amount * 100}%')
 
         return len(image_urls)
 
 class pixiv:
     def get_pixiv_urls_pid(pid):
-        function.print_time(f'Start scraping for illust({pid}) on Pixiv')
+        function.print_detail(memo='INFO', obj=f'Start scraping for "illust({pid})" on Pixiv')
         r = json.loads(requests.get(f'https://www.pixiv.net/ajax/illust/{pid}').content)['body']
         try:
             formed_link = []
             for page in range(int(r['pageCount'])):
                 formed_link.append(r['urls']['original'].replace('i.pximg.net/img-original', 'pixiv.ibaraki.workers.dev').replace('img', 'img-original/img').replace('p0', f'p{page}'))
-                function.print_time(f'Form {formed_link[page]}')
+                function.print_detail(memo='INFO', obj=f'Form {formed_link[page]}')
             return formed_link
         except:
             return ['Picture not found']
 
     def get_pixiv_urls_uid(uid):
-        function.print_time(f'Start scraping for user({uid}) on Pixiv')
+        function.print_detail(memo='INFO', obj=f'Start scraping for "user({uid})" on Pixiv')
         r = json.loads(requests.get(f'https://www.pixiv.net/ajax/user/{uid}/profile/all').content)
         try:
             name = r['body']['pickup'][0]['userName']

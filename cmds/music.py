@@ -54,7 +54,7 @@ class Music(Cog_Extension):
         else:
             channel = ctx.message.author.voice.channel
             await channel.connect()
-            function.print_time(f'Join to {channel}({channel.guild}) successfully')
+            function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Join successfully')
 
 
     @commands.command(aliases=['p'])
@@ -63,7 +63,7 @@ class Music(Cog_Extension):
         if voice_client == None:
             channel = ctx.message.author.voice.channel
             await channel.connect()
-            function.print_time(f'Join to {channel}({channel.guild}) successfully')
+            function.print_detail(memo='INFO',user=ctx.user, guild=ctx.guild, channel=ctx.message.channel, obj=f'Join successfully')
             voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
         print(1, voice_client)
 

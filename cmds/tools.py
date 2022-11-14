@@ -16,30 +16,27 @@ class Tools(Cog_Extension):
         await ctx.send(f'This channel id is {ctx.channel.id}')
 
     @commands.command()
-    async def bullshit(self, ctx, title, length=int()):
-        bullshit = bt.generate(title, length)
-        if len(bullshit) > 1994:
-            with open('./cmds/tools_data/bullshit/temp.txt', 'w') as file:
-                file.write(bullshit)
-            await ctx.send(file=discord.File('./cmds/tools_data/bullshit/temp.txt'))
-        else:
+    async def bullshit(self, ctx, title: str, length: int):
+        bullshits = bt.generate(title, length)
+        bl = function.split_str_to_list(bullshits, 1994)
+        for bullshit in bl:
             await ctx.send(f'```{bullshit}```')
-        function.print_time(f'Send {bullshit}')
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send "{bullshits}"')
 
     @commands.command()
-    async def eqinfo(self, ctx, eq=int()):
+    async def eqinfo(self, ctx, eq: int):
         data = scraper.scrap_eq(eq)
         combination = f'{data[0]}，芮氏規模 {data[1]} 級，深度 {data[2]} 公里，發生時間 {data[3]}'
         await ctx.send(combination)
         await ctx.send(data[4])
 
-        function.print_time(f'Send {combination}')
-        function.print_time(data[4])
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {combination}')
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=data[4])
 
     @commands.command()
     async def eqgif(self, ctx):
         await ctx.send('https://tenor.com/view/jumprooe-earthquake-gif-15657117')
-        function.print_time('Send https://tenor.com/view/jumprooe-earthquake-gif-15657117')
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Send https://tenor.com/view/jumprooe-earthquake-gif-15657117')
 
     @commands.command()
     async def synce(self, ctx, *ch_ids):
@@ -75,19 +72,19 @@ class Tools(Cog_Extension):
         pass
 
     @img.command()
-    async def ocr(self, ctx, lang, *urls):
+    async def ocr(self, ctx, lang: str, *urls):
         for attachment in ctx.message.attachments:
             for text in img.ocr(attachment, lang):
                 await ctx.reply(text)
-                function.print_time(f'Send {text}')
+                function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {text}')
 
         if urls != []:
             for url in urls:
                 for text in img.ocr(url, lang):
                     await ctx.reply(text)
-                    function.print_time(f'Send {text}')
+                    function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {text}')
     @img.command(aliases=['r'])
-    async def rotate(self, ctx, angle, url=None):
+    async def rotate(self, ctx, angle: float, url=None):
         for attachment in ctx.message.attachments:
             img.rotate(attachment, float(angle))
             await ctx.reply(file=discord.File('./cmds/tools_data/img/temp.png'))
@@ -95,6 +92,7 @@ class Tools(Cog_Extension):
         if url != None:
             img.rotate(url, float(angle))
             await ctx.reply(file=discord.File('./cmds/tools_data/img/temp.png'))
+            function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Send temp.png')
 
 
 async def setup(bot):
