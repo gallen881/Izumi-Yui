@@ -24,3 +24,4 @@ pyyaml
 typer==0.4.2
 pynacl
 youtube_dl
+colorama
