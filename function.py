@@ -33,7 +33,7 @@ def print_detail(memo='', user=None, guild=None, channel=None, obj=None) -> None
         mcolor = colorama.Fore.RED
     elif memo == 'ERROR':
         mcolor = colorama.Fore.RED + colorama.Style.BRIGHT
-    if memo == 'COMPLETENESS':
+    elif memo == 'COMPLETENESS':
         flush = True
         mcolor = colorama.Fore.CYAN
     else:
