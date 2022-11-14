@@ -87,3 +87,5 @@ def split_str_to_list(text: str, size: int) -> list:
         text_list = ['']
 
     print_detail(memo='INFO', obj=f'Form list: "{text_list}"')
+
+    return text_list

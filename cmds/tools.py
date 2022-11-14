@@ -31,7 +31,7 @@ class Tools(Cog_Extension):
         await ctx.send(data[4])
 
         function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {combination}')
-        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=data[4])
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {data[4]}')
 
     @commands.command()
     async def eqgif(self, ctx):
