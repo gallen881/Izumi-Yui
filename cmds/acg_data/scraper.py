@@ -41,7 +41,7 @@ class pinterest:
             times += 1
 
             if len(image_urls) > self.amount or times >= self.amount * 7 or rtimes == 2:
-                print(image_urls)
+                function.print_detail(memo='INFO', obj=image_urls)
                 function.print_detail(memo='INFO', obj=f'Add "{len(image_urls)}" pictures')
                 self.jdata['pinterest'].extend(image_urls)
                 function.write_json(self.json_path, self.jdata)

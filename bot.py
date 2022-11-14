@@ -1,6 +1,6 @@
 import keep_alive
 
-VERSION = '6.3.0'
+VERSION = '6.3.2'
 
 import asyncio
 import discord
@@ -26,22 +26,22 @@ async def main():
         await ctx.send(f'Loaded {extension} successfully')
         function.print_detail(memo='INFO',user=ctx.user, guild=ctx.guild, channel=ctx.message.channel, obj=f'{extension}.py loaded successfully')
 
-    @bot.command()
+    @bot.command(aliases=['ul'])
     @commands.is_owner()
     async def unload(ctx, extension):
         await bot.unload_extension(f'cmds.{extension}')
         await ctx.send(f'Unloaded {extension} successfully')
         function.print_detail(memo='INFO',user=ctx.user, guild=ctx.guild, channel=ctx.message.channel, obj=f'{extension}.py unloaded successfully')
 
-    @bot.command()
+    @bot.command(aliases=['rl'])
     @commands.is_owner()
     async def reload(ctx, extension):
         await bot.reload_extension(f'cmds.{extension}')
         await ctx.send(f'Reloaded {extension} successfully')
         function.print_detail(memo='INFO', user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'{extension}.py reloaded successfully')
 
-    @bot.command()
-    async def info(ctx):
+    @bot.command(aliases=['info'])
+    async def infomations(ctx):
         data = function.open_json("data.json")
         text =''
         for i, features in enumerate(data['new_features']):
