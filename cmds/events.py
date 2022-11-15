@@ -1,12 +1,17 @@
 from discord.ext import commands
+import discord
 from core.classes import Cog_Extension
 import function
+
 import random
 import yaml
 import time
+
 import cmds.events_data.form_w as fw
 import cmds.acg_data.data as ad
+
 from cmds.talk import Talk as CmdsTalk
+
 from chatterbot import ChatBot
 
 
@@ -14,12 +19,12 @@ from chatterbot import ChatBot
 
 class Events(Cog_Extension):
 
-
+    
     time_stamp = {}
 
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if message.author == self.bot.user or message.content.startswith('-'):
             return
 
@@ -90,13 +95,18 @@ class Events(Cog_Extension):
         data = function.open_json('./cmds/talk_data/talk.json')
         if str(message.channel.id) in data.keys():
             async with message.channel.typing():
-                responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
+                try:
+                    responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
+                except:
+                    CmdsTalk.chatbot[data[str(message.channel.id)]] = ChatBot(data[str(message.channel.id)], database_uri=f'sqlite:///cmds/talk_data/{data[str(message.channel.id)]}.database')
+                    responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
+                    function.print_detail(memo='WARN', user=message.author, guild=message.guild, channel=message.channel, obj=f'"{data[str(message.channel.id)]}" not found, create a new one')
                 await message.channel.send(responce)
             function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'"{message.content}" bot replied "{responce}"')
 
 
     @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload):
+    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         if payload.user_id != self.bot.user.id:
             if payload.emoji.name == '\u274C' and payload.message_id == ad.url_data.msg.id:
                 await ad.url_data.msg.delete()

@@ -21,7 +21,7 @@ class ACG(Cog_Extension):
         d.url_data(sent_msg, sent_url)
         
     @pinterest.command(aliases=['sp'])
-    async def scraper(self, ctx, amount):
+    async def scraper(self, ctx: commands.Context, amount):
         await ctx.send('Start scraping on Pinterest')
         await ctx.send(f'Add {scraper.pinterest(amount=int(amount)).get_pinterest_urls()} pictures')
 
@@ -37,13 +37,13 @@ class ACG(Cog_Extension):
         pass
 
     @pixiv.command(aliases=['i', 'pid'])
-    async def illust(self, ctx, pid):
+    async def illust(self, ctx: commands.Context, pid):
         url = scraper.pixiv.get_pixiv_urls_pid(pid)
         for i in range(len(url)):
             await ctx.send(url[i])
 
     @pixiv.command(aliases=['u', 'uid'])
-    async def user(self, ctx, uid):
+    async def user(self, ctx: commands.Context, uid):
         r = scraper.pixiv.get_pixiv_urls_uid(uid)
         await ctx.send(f'User name: {r[1]}')
         for key in r[0]:
@@ -66,7 +66,7 @@ class ACG(Cog_Extension):
             await ctx.send(text)
 
     @myself.command(aliases=['a'])
-    async def anime(self, ctx, url):
+    async def anime(self, ctx: commands.Context, url):
         r = myself.Myself.animate_total_info(url)
         await ctx.send(f'**{r["name"]}：**    *`{r["animate_type"]}`*\n\n`{r["synopsis"]}`\n\n*作者：{r["author"]}*\n*{r["premiere_date"]} 首播*\n*{r["episode"]}*\n\n{r["official_website"]}')
             

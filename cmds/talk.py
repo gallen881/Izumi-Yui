@@ -13,7 +13,7 @@ class Talk(Cog_Extension):
 
     @commands.command()
     @commands.is_owner()
-    async def listen(self, ctx):
+    async def listen(self, ctx: commands.Context):
         data = function.open_json('./cmds/events_data/listen.json')
         if str(ctx.guild.id) in data.keys():
             if ctx.channel.id not in data[str(ctx.guild.id)]:
@@ -31,7 +31,7 @@ class Talk(Cog_Extension):
 
 
     @commands.command()
-    async def nolisten(self, ctx):
+    async def nolisten(self, ctx: commands.Context):
         data = function.open_json('./cmds/events_data/listen.json')
         try:
             data[str(ctx.guild.id)].remove(ctx.channel.id)
@@ -44,7 +44,7 @@ class Talk(Cog_Extension):
 
         
     @commands.command()
-    async def chat(self, ctx, lang=''):
+    async def chat(self, ctx: commands.Context, lang=''):
         talk = function.open_json('./cmds/talk_data/talk.json')
         if lang == '':
             talk[str(ctx.channel.id)] = f'local.{ctx.channel.id}'
@@ -57,7 +57,7 @@ class Talk(Cog_Extension):
 
     
     @commands.command()
-    async def nochat(self, ctx):
+    async def nochat(self, ctx: commands.Context):
         talk = function.open_json('./cmds/talk_data/talk.json')
         del talk[str(ctx.message.channel.id)]
         function.write_json('./cmds/talk_data/talk.json', talk)
@@ -66,7 +66,7 @@ class Talk(Cog_Extension):
 
     @commands.command()
     @commands.is_owner()
-    async def train(self, ctx, lang=''):
+    async def train(self, ctx: commands.Context, lang=''):
         if lang == '':
             lang = f'local.{ctx.channel.id}'
         ChatterBotCorpusTrainer(self.chatbot[lang]).train(f'chatterbot.corpus.{lang}')

@@ -58,7 +58,7 @@ class Music(Cog_Extension):
 
 
     @commands.command(aliases=['p'])
-    async def play(self, ctx, url):
+    async def play(self, ctx: commands.Context, url):
         voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
         if voice_client == None:
             channel = ctx.message.author.voice.channel

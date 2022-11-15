@@ -8,17 +8,17 @@ import cmds.tools_data.img.img as img
 
 class Tools(Cog_Extension):
     @commands.command()
-    async def ping(self, ctx):
+    async def ping(self, ctx: commands.Context):
         await ctx.send(f'ping: {self.bot.latency * 1000} (ms)')
 
 
     @commands.command()
-    async def getchannelid(self, ctx):
+    async def getchannelid(self, ctx: commands.Context):
         await ctx.send(f'This channel id is {ctx.channel.id}')
 
     
     @commands.command()
-    async def say(self, ctx, *messages):
+    async def say(self, ctx: commands.Context, *messages):
         texts = ''
         for message in messages:
             texts += message + ' '
@@ -28,7 +28,7 @@ class Tools(Cog_Extension):
 
 
     @commands.command()
-    async def bullshit(self, ctx, title: str, length: int):
+    async def bullshit(self, ctx: commands.Context, title: str, length: int):
         bullshits = bt.generate(title, length)
         bl = function.split_str_to_list(bullshits, 1994)
         for bullshit in bl:
@@ -36,7 +36,7 @@ class Tools(Cog_Extension):
         function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send "{bullshits}"')
 
     @commands.command()
-    async def eqinfo(self, ctx, eq: int):
+    async def eqinfo(self, ctx: commands.Context, eq: int):
         data = scraper.scrap_eq(eq)
         combination = f'{data[0]}，芮氏規模 {data[1]} 級，深度 {data[2]} 公里，發生時間 {data[3]}'
         await ctx.send(combination)
@@ -51,7 +51,7 @@ class Tools(Cog_Extension):
         function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Send https://tenor.com/view/jumprooe-earthquake-gif-15657117')
 
     @commands.command()
-    async def synce(self, ctx, *ch_ids):
+    async def synce(self, ctx: commands.Context, *ch_ids):
         data = function.open_json('./cmds/events_data/synchronous_channel.json')
         if str(ctx.channel.id) in data.keys():
             for ch_id in ch_ids:
@@ -68,7 +68,7 @@ class Tools(Cog_Extension):
 
 
     @commands.command()
-    async def nosynce(self, ctx, *ch_ids):
+    async def nosynce(self, ctx: commands.Context, *ch_ids):
         data = function.open_json('./cmds/events_data/synchronous_channel.json')
 
         if str(ctx.channel.id) in data.keys():
@@ -84,7 +84,7 @@ class Tools(Cog_Extension):
         pass
 
     @img.command()
-    async def ocr(self, ctx, lang: str, *urls):
+    async def ocr(self, ctx: commands.Context, lang: str, *urls):
         for attachment in ctx.message.attachments:
             for text in img.ocr(attachment, lang):
                 await ctx.reply(text)
@@ -96,7 +96,7 @@ class Tools(Cog_Extension):
                     await ctx.reply(text)
                     function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {text}')
     @img.command(aliases=['r'])
-    async def rotate(self, ctx, angle: float, url=None):
+    async def rotate(self, ctx: commands.Context, angle: float, url=None):
         for attachment in ctx.message.attachments:
             img.rotate(attachment, float(angle))
             await ctx.reply(file=discord.File('./cmds/tools_data/img/temp.png'))
