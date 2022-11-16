@@ -31,6 +31,7 @@ class Talk(Cog_Extension):
 
 
     @commands.command()
+    @commands.is_owner()
     async def nolisten(self, ctx: commands.Context):
         data = function.open_json('./cmds/events_data/listen.json')
         try:
