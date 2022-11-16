@@ -41,7 +41,7 @@ class pinterest:
             times += 1
 
             if len(image_urls) > self.amount or times >= self.amount * 7 or rtimes == 2:
-                function.print_detail(memo='INFO', obj=image_urls)
+                function.print_detail(memo='INFO', obj=f'Add "{image_urls}"')
                 function.print_detail(memo='INFO', obj=f'Add "{len(image_urls)}" pictures')
                 self.jdata['pinterest'].extend(image_urls)
                 function.write_json(self.json_path, self.jdata)
@@ -51,7 +51,7 @@ class pinterest:
                     self.bookmark = resource_response["bookmark"]
                 except:
                     self.reset_bookmark()
-                    function.print_detail(memo='INFO', obj='Reset Pinterest bookmark')
+                    function.print_detail(memo='WARN', obj='No bookmark, reseting Pinterest bookmark')
                     rtimes += 1
                 function.print_detail(memo='COMPLETENESS', obj=f'About {len(image_urls) / self.amount * 100}%')
 
