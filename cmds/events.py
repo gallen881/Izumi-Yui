@@ -30,7 +30,7 @@ class Events(Cog_Extension):
 
         data = function.open_json('./cmds/events_data/www.json')
         if message.channel.id not in data['noww_id']:
-            if message.content in data["w"] or message.content.endswith('w'):
+            if message.content.endswith('w'):
                 rd = random.randrange(10000)
                 if rd <= -1:
                     await message.channel.send(fw.form_w('2000'))
