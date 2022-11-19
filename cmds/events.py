@@ -25,7 +25,7 @@ class Events(Cog_Extension):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        if message.author == self.bot.user or message.content.startswith('-'):
+        if message.author == self.bot.user or message.content.startswith('-') or message.author.bot:
             return
 
         data = function.open_json('./cmds/events_data/www.json')
