@@ -45,9 +45,9 @@ class Talk(Cog_Extension):
 
         
     @commands.command()
-    async def chat(self, ctx: commands.Context, lang=''):
+    async def chat(self, ctx: commands.Context, lang=None):
         talk = function.open_json('./cmds/talk_data/talk.json')
-        if lang == '':
+        if lang == None:
             talk[str(ctx.channel.id)] = f'local.{ctx.channel.id}'
             lang = f'local.{ctx.channel.id}'
         else:
@@ -67,10 +67,11 @@ class Talk(Cog_Extension):
 
     @commands.command()
     @commands.is_owner()
-    async def train(self, ctx: commands.Context, lang=''):
-        if lang == '':
+    async def train(self, ctx: commands.Context, lang=None):
+        if lang == None:
             lang = f'local.{ctx.channel.id}'
-        ChatterBotCorpusTrainer(self.chatbot[lang]).train(f'chatterbot.corpus.{lang}')
+        ChatterBotCorpusTrainer(self.chatbot[function.open_json('./cmds/talk_data/talk.json')[str(ctx.message.channel.id)]]).train(f'chatterbot.corpus.{lang}')
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Train {lang} successfully')
 
 
     
