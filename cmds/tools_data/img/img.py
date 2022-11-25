@@ -42,7 +42,8 @@ def rotate(img_url: str, angle: str) -> None:
             break
 
 
-def generate(prompts: str):
-    image_url = openai.Image.create(prompt=prompts, n=1, size='1024x1024')['data'][0]['url']
+def generate(prompts: str) -> str:
+    response = openai.Image.create(prompt=prompts, n=1, size='1024x1024')
+    image_url = response['data'][0]['url']
     function.print_detail(memo='INFO', obj=f'Form image: "{image_url}"')
     return image_url
