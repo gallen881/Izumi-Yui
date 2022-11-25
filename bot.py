@@ -1,6 +1,6 @@
 import keep_alive
 
-VERSION = 'Alpha 6.4.3'
+VERSION = 'Alpha 6.4.4'
 
 import asyncio
 import discord

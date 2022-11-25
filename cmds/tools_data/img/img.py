@@ -4,6 +4,10 @@ import requests
 import function
 import os
 
+import openai
+openai.api_key = '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'
+
+
 IMG_PATH = './cmds/tools_data/img/temp.png'
 
 def ocr(img_url: str, lang: str) -> list:
@@ -36,3 +40,9 @@ def rotate(img_url: str, angle: str) -> None:
             function.print_detail(memo='INFO', obj='Saved temp.png successfully')
         else:
             break
+
+
+def generate(prompts: str):
+    image_url = openai.Image.create(prompt=prompts, n=1, size='1024x1024')['data'][0]['url']
+    function.print_detail(memo='INFO', obj=f'Form image: "{image_url}"')
+    return image_url

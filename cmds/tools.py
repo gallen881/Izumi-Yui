@@ -107,5 +107,10 @@ class Tools(Cog_Extension):
             function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Send temp.png')
 
 
+    @img.command(aliases=['g'])
+    async def generate(self, ctx: commands.Context, prompts: str):
+        await ctx.send(img.generate(prompts))
+
+
 async def setup(bot):
     await bot.add_cog(Tools(bot))
