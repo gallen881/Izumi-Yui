@@ -5,7 +5,7 @@ import function
 import os
 
 import openai
-openai.api_key = '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'
+openai.api_key = function.open_json('data.json')['openai_token']
 
 
 IMG_PATH = './cmds/tools_data/img/temp.png'

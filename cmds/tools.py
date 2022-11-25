@@ -108,8 +108,11 @@ class Tools(Cog_Extension):
 
 
     @img.command(aliases=['g'])
-    async def generate(self, ctx: commands.Context, prompts: str):
-        await ctx.send(img.generate(prompts))
+    async def generate(self, ctx: commands.Context, *prompt):
+        texts = ''
+        for message in prompt:
+            texts += message + ' '
+        await ctx.send(img.generate(texts))
 
 
 async def setup(bot):
