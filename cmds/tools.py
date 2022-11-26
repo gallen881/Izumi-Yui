@@ -112,7 +112,10 @@ class Tools(Cog_Extension):
         texts = ''
         for message in prompt:
             texts += message + ' '
-        await ctx.send(img.generate(texts))
+
+        img.generate(texts)
+        await ctx.reply(file=discord.File('./cmds/tools_data/img/temp.png'))
+
 
 
 async def setup(bot):
