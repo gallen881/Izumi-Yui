@@ -2,7 +2,8 @@
 !bullshit.json
 
 *.db
-
+*.db-shm
+*.db-wal
 *.m4a
 *.webm
 *__pycache__
