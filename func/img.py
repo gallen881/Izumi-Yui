@@ -12,6 +12,7 @@ openai.api_key = function.open_json('./data/config.json')['token']['openai']
 IMG_PATH = './temp/img'
 OPENAI_IMG_PATH = './temp/img/openai'
 function.auto_mkdir(IMG_PATH[:-4])
+function.auto_mkdir(IMG_PATH)
 function.auto_mkdir(OPENAI_IMG_PATH)
 
 def ocr(img_url: str, lang: str) -> list:
