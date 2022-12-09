@@ -94,7 +94,6 @@ class Events(Cog_Extension):
         data = function.open_json('./data/talk.json')
         if str(message.channel.id) in data.keys():
             async with message.channel.typing():
-                print('in')
                 if data[str(message.channel.id)] != 'openai':
                     try:
                         responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
