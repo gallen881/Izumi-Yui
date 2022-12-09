@@ -1,6 +1,6 @@
 import keep_alive
 
-VERSION = 'Alpha 7.0.1'
+VERSION = 'Alpha 7.0.5'
 
 import asyncio
 import discord
@@ -16,7 +16,7 @@ async def main():
     @bot.event
     async def on_ready():
         function.print_detail(memo='INFO', obj='Bot is Ready')
-        await bot.change_presence(status=discord.Status.online, activity=discord.Game(function.open_json('config.json')['playinggame']))
+        await bot.change_presence(status=discord.Status.online, activity=discord.Game(function.open_json('./data/config.json')['playinggame']))
 
 
     @bot.command()
