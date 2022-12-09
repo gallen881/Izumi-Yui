@@ -10,6 +10,7 @@ def open_json(FileName: str) -> dict:
     open json file\n
     if not found, create
     '''
+    
     if os.path.exists(FileName):
         with open(FileName, mode='r', encoding='utf-8') as file:
             data = json.loads(file.read())
