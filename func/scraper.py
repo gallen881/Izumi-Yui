@@ -1,11 +1,11 @@
 import requests
 import urllib
 import json
-import function
+import core.function as function
 
-class pinterest:
-    json_path = 'cmds/acg_data/urls.json'
-    jdata = function.open_json(json_path)
+class Pinterest:
+    urls_path = './data/urls.json'
+    jdata = function.open_json(urls_path)
     search_keyword = 'anime girl'
     bookmark = ''
     url = "https://tr.pinterest.com/resource/BaseSearchResource/get/?"
@@ -35,7 +35,7 @@ class pinterest:
             results = data["results"]
 
             for i in results:
-                if i["images"]["orig"]["url"] not in image_urls and i["images"]["orig"]["url"] not in self.jdata["pinterest"] and i["images"]["orig"]["url"] not in pinterest.jdata["nopinterest"]:
+                if i["images"]["orig"]["url"] not in image_urls and i["images"]["orig"]["url"] not in self.jdata["pinterest"] and i["images"]["orig"]["url"] not in Pinterest.jdata["nopinterest"]:
                     image_urls.append(i["images"]["orig"]["url"])
             
             times += 1
@@ -44,7 +44,7 @@ class pinterest:
                 function.print_detail(memo='INFO', obj=f'Add "{image_urls}"')
                 function.print_detail(memo='INFO', obj=f'Add "{len(image_urls)}" pictures')
                 self.jdata['pinterest'].extend(image_urls)
-                function.write_json(self.json_path, self.jdata)
+                function.write_json(self.urls_path, self.jdata)
                 break
             else:
                 try:
@@ -57,7 +57,7 @@ class pinterest:
 
         return len(image_urls)
 
-class pixiv:
+class Pixiv:
     def get_pixiv_urls_pid(pid):
         function.print_detail(memo='INFO', obj=f'Start scraping for "illust({pid})" on Pixiv')
         r = json.loads(requests.get(f'https://www.pixiv.net/ajax/illust/{pid}').content)['body']
@@ -78,3 +78,23 @@ class pixiv:
         except:
             name = 'User name not found'
         return r['body']['illusts'].keys(), name
+
+    
+class Earthquake:
+    def scrap_eq(eq):
+        function.print_detail(memo='INFO', obj='Start scraping on cwb')
+        r = requests.get('https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-2B9F8C22-56A8-4E07-B771-3CBB03A94616')
+        jdata = r.json()
+        eqs = jdata['records']['earthquake']
+
+        eq -= 1
+
+        loc = eqs[eq]['earthquakeInfo']['epiCenter']['location']
+        val = eqs[eq]['earthquakeInfo']['magnitude']['magnitudeValue']
+        dep = eqs[eq]['earthquakeInfo']['depth']['value']
+        eq_time = eqs[eq]['earthquakeInfo']['originTime']
+        img = eqs[eq]['reportImageURI']
+
+        function.print_detail(memo='INFO', obj='Finish scraping')
+
+        return loc, val, dep, eq_time, img

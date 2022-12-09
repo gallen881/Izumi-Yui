@@ -1,1 +1,0 @@
-data.json: https://github.com/StillFantastic/bullshit/blob/master/generator/data.json

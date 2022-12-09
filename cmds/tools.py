@@ -1,10 +1,12 @@
 import discord
 from discord.ext import commands
+
 from core.classes import Cog_Extension
-import function
-import cmds.tools_data.bullshit.bullshit as bt
-import cmds.tools_data.scraper as scraper
-import cmds.tools_data.img.img as img
+import core.function as function
+import func.bullshit as bt
+import func.img as img
+import func.scraper as scraper
+
 
 class Tools(Cog_Extension):
     @commands.command()
@@ -37,7 +39,7 @@ class Tools(Cog_Extension):
 
     @commands.command()
     async def eqinfo(self, ctx: commands.Context, eq: int):
-        data = scraper.scrap_eq(eq)
+        data = scraper.Earthquake.scrap_eq(eq)
         combination = f'{data[0]}，芮氏規模 {data[1]} 級，深度 {data[2]} 公里，發生時間 {data[3]}'
         await ctx.send(combination)
         await ctx.send(data[4])
@@ -46,13 +48,13 @@ class Tools(Cog_Extension):
         function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {data[4]}')
 
     @commands.command()
-    async def eqgif(self, ctx):
+    async def eqgif(self, ctx: commands.Context):
         await ctx.send('https://tenor.com/view/jumprooe-earthquake-gif-15657117')
         function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Send https://tenor.com/view/jumprooe-earthquake-gif-15657117')
 
     @commands.command()
     async def synce(self, ctx: commands.Context, *ch_ids):
-        data = function.open_json('./cmds/events_data/synchronous_channel.json')
+        data = function.open_json('./data/synchronous_channel.json')
         if str(ctx.channel.id) in data.keys():
             for ch_id in ch_ids:
                 if ch_id not in str(data[str(ctx.channel.id)]):
@@ -64,12 +66,12 @@ class Tools(Cog_Extension):
                 data[str(ctx.channel.id)].append(int(ch_id))
                 await ctx.send(f'Synce {ch_id} successfully')
 
-        function.write_json('./cmds/events_data/synchronous_channel.json', data)
+        function.write_json('./data/synchronous_channel.json', data)
 
 
     @commands.command()
     async def nosynce(self, ctx: commands.Context, *ch_ids):
-        data = function.open_json('./cmds/events_data/synchronous_channel.json')
+        data = function.open_json('./data/synchronous_channel.json')
 
         if str(ctx.channel.id) in data.keys():
             for ch_id in ch_ids:
@@ -77,7 +79,7 @@ class Tools(Cog_Extension):
                     data[str(ctx.channel.id)].remove(int(ch_id))
                     await ctx.send(f'Disable synce to {ch_id} successfully')
 
-        function.write_json('./cmds/events_data/synchronous_channel.json', data)
+        function.write_json('./data/synchronous_channel.json', data)
 
     @commands.group()
     async def img(self, ctx):
@@ -95,16 +97,19 @@ class Tools(Cog_Extension):
                 for text in img.ocr(url, lang):
                     await ctx.reply(text)
                     function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {text}')
+
+
     @img.command(aliases=['r'])
-    async def rotate(self, ctx: commands.Context, angle: float, url=None):
+    async def rotate(self, ctx: commands.Context, angle: float, *urls):
         for attachment in ctx.message.attachments:
             img.rotate(attachment, float(angle))
-            await ctx.reply(file=discord.File('./cmds/tools_data/img/temp.png'))
+            await ctx.reply(file=discord.File('./temp/img/temp.png'))
 
-        if url != None:
-            img.rotate(url, float(angle))
-            await ctx.reply(file=discord.File('./cmds/tools_data/img/temp.png'))
-            function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Send temp.png')
+        if urls != []:
+            for url in urls:
+                img.rotate(url, float(angle))
+                await ctx.reply(file=discord.File('./temp/img/temp.png'))
+                function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Send temp.png')
 
 
     @img.command(aliases=['g'])
@@ -112,9 +117,7 @@ class Tools(Cog_Extension):
         texts = ''
         for message in prompt:
             texts += message + ' '
-
-        img.generate(texts)
-        await ctx.reply(file=discord.File('./cmds/tools_data/img/temp.png'))
+        await ctx.reply(file=discord.File(img.generate(texts)))
 
 
 

@@ -1,7 +1,7 @@
 import random
-import function
+import core.function as function
 
-DATA = function.open_json("./cmds/tools_data/bullshit/bullshit.json")
+DATA = function.open_json("./data/bullshit.json")
 
 def shuffle(l):
     pool = list(l) * 2

@@ -1,10 +1,11 @@
 from discord.ext import commands
-from core.classes import Cog_Extension
-import function
 import random
-import cmds.acg_data.data as d
-import cmds.acg_data.scraper as scraper
-import cmds.acg_data.myself as myself
+
+from core.classes import Cog_Extension
+import core.function as function
+import func.temp as d
+import func.scraper as scraper
+
 
 class ACG(Cog_Extension):
     @commands.group(aliases=['pin'])
@@ -12,8 +13,8 @@ class ACG(Cog_Extension):
         pass
 
     @pinterest.command()
-    async def img(self, ctx):
-        url_list = function.open_json('cmds/acg_data/urls.json')['pinterest']
+    async def img(self, ctx: commands.Context):
+        url_list = function.open_json('./data/urls.json')['pinterest']
         sent_url = url_list[random.randrange(len(url_list))]
         sent_msg = await ctx.send(sent_url)
         await sent_msg.add_reaction('\u274C')
@@ -21,13 +22,13 @@ class ACG(Cog_Extension):
         d.url_data(sent_msg, sent_url)
         
     @pinterest.command(aliases=['sp'])
-    async def scraper(self, ctx: commands.Context, amount):
+    async def scraper(self, ctx: commands.Context, amount: int):
         await ctx.send('Start scraping on Pinterest')
-        await ctx.send(f'Add {scraper.pinterest(amount=int(amount)).get_pinterest_urls()} pictures')
+        await ctx.send(f'Add {scraper.pinterest(amount=amount).get_pinterest_urls()} pictures')
 
     @pinterest.command(aliases=['rbm'])
     @commands.is_owner()
-    async def resetbm(self, ctx):
+    async def resetbm(self, ctx: commands.Context):
         scraper.pinterest.reset_bookmark
         await ctx.send('Reset Pinterest bookmark successfully')
         function.print_detail(memo='INFO',user=ctx.auther, guild=ctx.guild, channel=ctx.message.channel, obj='Reset Pinterest bookmark successfully')
@@ -52,23 +53,6 @@ class ACG(Cog_Extension):
                 await ctx.send(url[i])
         function.print_detail(memo='INFO',user=ctx.auther, guild=ctx.guild, channel=ctx.message.channel, obj='Scrape complete')
 
-    @commands.group(aliases=['ms'])
-    async def myself(self, ctx):
-        pass
-
-    @myself.command(aliases=['w'])
-    async def week(self, ctx):
-        r = myself.Myself.week_animate()
-        for day in r:
-            text = f'***{day}***\n>>> '
-            for anime in r[day]:
-                text += f'''{anime['name']} (lastest:{anime['update'][5:-3]})\n<{anime['url']}>\n\n'''
-            await ctx.send(text)
-
-    @myself.command(aliases=['a'])
-    async def anime(self, ctx: commands.Context, url):
-        r = myself.Myself.animate_total_info(url)
-        await ctx.send(f'**{r["name"]}：**    *`{r["animate_type"]}`*\n\n`{r["synopsis"]}`\n\n*作者：{r["author"]}*\n*{r["premiere_date"]} 首播*\n*{r["episode"]}*\n\n{r["official_website"]}')
             
 
 async def setup(bot):

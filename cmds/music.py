@@ -1,10 +1,11 @@
 from discord.ext import commands
-from core.classes import Cog_Extension
-import function
 import youtube_dl
 import asyncio
 import discord
 import nacl
+
+from core.classes import Cog_Extension
+import core.function as function
 
 youtube_dl.utils.bug_reports_message = lambda: ''
 
@@ -48,7 +49,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 class Music(Cog_Extension):
     PlayList = {}
     @commands.command()
-    async def join(self, ctx):
+    async def join(self, ctx: commands.Context):
         if not ctx.message.author.voice:
             await ctx.send('You is not connected to a voice channel')
         else:

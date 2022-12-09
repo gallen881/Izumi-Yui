@@ -1,1 +1,0 @@
-myself.py: https://github.com/hgalytoby/MyselfAnimeDownloader

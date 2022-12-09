@@ -1,16 +1,28 @@
+import colorama
+import time
+import re
+import os
+import json
+
+
 def open_json(FileName: str) -> dict:
-    import json
-    if FileName != '':
-        strList = FileName.split('.')
-        if strList[len(strList)-1].lower() == 'json':
-            with open(FileName, mode = 'r', encoding = 'utf-8') as file:
-                data = json.loads(file.read())
-                file.close()
-                return data
+    '''
+    open json file\n
+    if not found, create
+    '''
+    if os.path.exists(FileName):
+        with open(FileName, mode='r', encoding='utf-8') as file:
+            data = json.loads(file.read())
+            file.close()
+            return data
+    else:
+        with open(FileName, 'w', encoding='utf8') as file:
+            json.dump({}, file)
+            file.close()
+        return {}
 
 
 def write_json(FileName: str, dictionary: dict) -> None:
-    import json
     if FileName != '':
         StrList = FileName.split('.')
         if StrList[len(StrList)-1].lower() == 'json':
@@ -19,12 +31,20 @@ def write_json(FileName: str, dictionary: dict) -> None:
                 file.close()
 
 
+def auto_mkdir(*paths: str) -> None:
+    for path in paths:
+        if not os.path.exists(path):
+            os.mkdir(path)
+
+
+def arrange_text(text):
+    return re.sub('\/:*?"<>|.', ' ', text)
+
+
 def print_detail(memo='', user=None, guild=None, channel=None, obj=None) -> None:
-    import time
 
     flush = False
 
-    import colorama
     colorama.init()
 
     if memo == 'INFO':

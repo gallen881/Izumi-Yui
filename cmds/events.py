@@ -1,20 +1,20 @@
 from discord.ext import commands
 import discord
-from core.classes import Cog_Extension
-import function
 
 import random
 import yaml
 import time
+import openai
 
-import cmds.events_data.form_w as fw
-import cmds.acg_data.data as ad
-
+from core.classes import Cog_Extension
+import core.function as function
+import func.form_w as fw
+import func.temp as ad
 from cmds.talk import Talk as CmdsTalk
 
 from chatterbot import ChatBot
 
-
+openai.api_key = function.open_json('./data/config.json')['token']['openai']
 
 
 class Events(Cog_Extension):
@@ -28,7 +28,7 @@ class Events(Cog_Extension):
         if message.author == self.bot.user or message.content.startswith('-') or message.author.bot:
             return
 
-        data = function.open_json('./cmds/events_data/www.json')
+        data = function.open_json('./data/www.json')
         if message.channel.id not in data['noww_id']:
             if message.content.endswith('w'):
                 rd = random.randrange(10000)
@@ -38,7 +38,7 @@ class Events(Cog_Extension):
                     await message.channel.send(fw.form_w('random'))
 
 
-        data = function.open_json('./cmds/events_data/synchronous_channel.json')
+        data = function.open_json('./data/synchronous_channel.json')
         if str(message.channel.id) in data.keys():
             for c in data[str(message.channel.id)]:
                 ch = self.bot.get_channel(c)
@@ -50,7 +50,7 @@ class Events(Cog_Extension):
                     await ch.send(attachment)
 
 
-        data = function.open_json('./cmds/events_data/listen.json')
+        data = function.open_json('./data/listen.json')
         if message.channel.id in data[str(message.guild.id)]:
             path = f'./chatterbot/chatterbot_corpus/data/local/{str(message.channel.id)}.yml'
             try:
@@ -62,8 +62,7 @@ class Events(Cog_Extension):
                 yml = {'categories': [str(message.channel.id)], 'conversations': []}
                 existing = False
 
-            
-            print(0)
+
 
             if message.content != '':
                 try:
@@ -92,15 +91,18 @@ class Events(Cog_Extension):
                 function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'Add "{message.content}" to a new conversation')
 
 
-        data = function.open_json('./cmds/talk_data/talk.json')
+        data = function.open_json('./data/talk.json')
         if str(message.channel.id) in data.keys():
             async with message.channel.typing():
-                try:
-                    responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
-                except:
-                    CmdsTalk.chatbot[data[str(message.channel.id)]] = ChatBot(data[str(message.channel.id)], database_uri=f'sqlite:///cmds/talk_data/{data[str(message.channel.id)]}.database')
-                    responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
-                    function.print_detail(memo='WARN', user=message.author, guild=message.guild, channel=message.channel, obj=f'"{data[str(message.channel.id)]}" not found, create a new one')
+                if data[str(message.channel.id)] != 'openai':
+                    try:
+                        responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
+                    except:
+                        CmdsTalk.chatbot[data[str(message.channel.id)]] = ChatBot(data[str(message.channel.id)], database_uri=f'sqlite:///data/{data[str(message.channel.id)]}.db')
+                        responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
+                        function.print_detail(memo='WARN', user=message.author, guild=message.guild, channel=message.channel, obj=f'"{data[str(message.channel.id)]}" not found, create a new one')
+                else:
+                    openai.Completion.create(model='text-davinci-003', prompt=f'<|endoftext|>{content_to_classify}\n--\nLabel:', temperature=0.5, max_tokens=60, top_p=0.3, frequency_penalty=0.5, presence_penalty=0.0, echo=True)
                 await message.channel.send(responce)
             function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'"{message.content}" bot replied "{responce}"')
 
@@ -110,10 +112,10 @@ class Events(Cog_Extension):
         if payload.user_id != self.bot.user.id:
             if payload.emoji.name == '\u274C' and payload.message_id == ad.url_data.msg.id:
                 await ad.url_data.msg.delete()
-                urls = function.open_json('cmds/acg_data/urls.json')
+                urls = function.open_json('./data/urls.json')
                 urls['pinterest'].remove(ad.url_data.url)
                 urls['nopinterest'].append(ad.url_data.url)
-                function.write_json('cmds/acg_data/urls.json', urls)
+                function.write_json('./data/urls.json', urls)
 
                 await self.bot.get_channel(payload.channel_id).send('Deleted picture successfully')
 
