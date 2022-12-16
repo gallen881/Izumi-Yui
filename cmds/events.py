@@ -52,7 +52,9 @@ class Events(Cog_Extension):
 
 
         def IsZhF(text: str) -> bool:
-            if len(text) <= 4:
+            if text == 'hi' or text == 'so':
+                return False
+            elif len(text) <= 4:
                 return mi.IsZhInput(text)
             else:
                 return mi.IsZhInputs(text) > 0
