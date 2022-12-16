@@ -49,14 +49,17 @@ class Events(Cog_Extension):
                 for attachment in message.attachments:
                     await ch.send(f'*{message.author.name}#{message.author.discriminator} sent (from {message.channel})*')
                     await ch.send(attachment)
-    
-    
-        if len(message.content) <= 4:
-            if mi.IsZhInput(message.content):
-                await message.add_reaction('<:keyboard:854350638918008913>')
-        else:
-            if mi.IsZhInputs(message.content) > 0:
-                await message.add_reaction('<:keyboard:854350638918008913>')
+
+
+        def IsZhF(text: str) -> bool:
+            if len(text) <= 4:
+                return mi.IsZhInput(text)
+            else:
+                return mi.IsZhInputs(text) > 0
+        if IsZhF(message.content):
+            await message.add_reaction('<:keyboard:854350638918008913>')
+        elif IsZhF(message.content + ' '):
+            await message.add_reaction('<:keyboard:854350638918008913>')
 
 
         data = function.open_json('./data/listen.json')
