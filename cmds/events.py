@@ -10,6 +10,7 @@ from core.classes import Cog_Extension
 import core.function as function
 import func.form_w as fw
 import func.temp as ad
+import func.modifyinput as mi
 from cmds.talk import Talk as CmdsTalk
 
 from chatterbot import ChatBot
@@ -48,6 +49,14 @@ class Events(Cog_Extension):
                 for attachment in message.attachments:
                     await ch.send(f'*{message.author.name}#{message.author.discriminator} sent (from {message.channel})*')
                     await ch.send(attachment)
+    
+    
+        if len(message.content) <= 4:
+            if mi.IsZhInput(message.content):
+                await message.add_reaction('<:keyboard:854350638918008913>')
+        else:
+            if mi.IsZhInputs(message.content) > 0:
+                await message.add_reaction('<:keyboard:854350638918008913>')
 
 
         data = function.open_json('./data/listen.json')
