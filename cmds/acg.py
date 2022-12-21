@@ -18,20 +18,20 @@ class ACG(Cog_Extension):
         sent_url = url_list[random.randrange(len(url_list))]
         sent_msg = await ctx.send(sent_url)
         await sent_msg.add_reaction('\u274C')
-        function.print_detail(memo='INFO',user=ctx.auther, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {sent_url}')
+        function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send {sent_url}')
         d.url_data(sent_msg, sent_url)
         
     @pinterest.command(aliases=['sp'])
     async def scraper(self, ctx: commands.Context, amount: int):
         await ctx.send('Start scraping on Pinterest')
-        await ctx.send(f'Add {scraper.pinterest(amount=amount).get_pinterest_urls()} pictures')
+        await ctx.send(f'Add {scraper.Pinterest(amount=amount).get_pinterest_urls()} pictures')
 
     @pinterest.command(aliases=['rbm'])
     @commands.is_owner()
     async def resetbm(self, ctx: commands.Context):
-        scraper.pinterest.reset_bookmark
+        scraper.Pinterest.reset_bookmark
         await ctx.send('Reset Pinterest bookmark successfully')
-        function.print_detail(memo='INFO',user=ctx.auther, guild=ctx.guild, channel=ctx.message.channel, obj='Reset Pinterest bookmark successfully')
+        function.print_detail(memo='INFO', user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Reset Pinterest bookmark successfully')
 
     @commands.group(aliases=['px'])
     async def pixiv(self, ctx):
@@ -39,19 +39,19 @@ class ACG(Cog_Extension):
 
     @pixiv.command(aliases=['i', 'pid'])
     async def illust(self, ctx: commands.Context, pid):
-        url = scraper.pixiv.get_pixiv_urls_pid(pid)
+        url = scraper.Pixiv.get_pixiv_urls_pid(pid)
         for i in range(len(url)):
             await ctx.send(url[i])
 
     @pixiv.command(aliases=['u', 'uid'])
     async def user(self, ctx: commands.Context, uid):
-        r = scraper.pixiv.get_pixiv_urls_uid(uid)
+        r = scraper.Pixiv.get_pixiv_urls_uid(uid)
         await ctx.send(f'User name: {r[1]}')
         for key in r[0]:
-            url = scraper.pixiv.get_pixiv_urls_pid(key)
+            url = scraper.Pixiv.get_pixiv_urls_pid(key)
             for i in range(len(url)):
                 await ctx.send(url[i])
-        function.print_detail(memo='INFO',user=ctx.auther, guild=ctx.guild, channel=ctx.message.channel, obj='Scrape complete')
+        function.print_detail(memo='INFO', user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj='Scrape complete')
 
             
 

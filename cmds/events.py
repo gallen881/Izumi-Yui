@@ -51,16 +51,9 @@ class Events(Cog_Extension):
                     await ch.send(attachment)
 
 
-        def IsZhF(text: str) -> bool:
-            if text == 'hi ' or text == 'so ':
-                return False
-            elif len(text) <= 4:
-                return mi.IsZhInput(text)
-            else:
-                return mi.IsZhInputs(text) > 0
-        if IsZhF(message.content):
+        if mi.IsZhInputs(message.content):
             await message.add_reaction('<:keyboard:854350638918008913>')
-        elif IsZhF(message.content + ' '):
+        elif mi.IsZhInputs(message.content + ' '):
             await message.add_reaction('<:keyboard:854350638918008913>')
 
 
