@@ -38,7 +38,7 @@ class Tools(Cog_Extension):
         function.print_detail(memo='INFO',user=ctx.author, guild=ctx.guild, channel=ctx.message.channel, obj=f'Send "{bullshits}"')
 
     @commands.command()
-    async def eqinfo(self, ctx: commands.Context, eq: int):
+    async def eqinfo(self, ctx: commands.Context, eq=1):
         data = scraper.Earthquake.scrap_eq(eq)
         combination = f'{data[0]}，芮氏規模 {data[1]} 級，深度 {data[2]} 公里，發生時間 {data[3]}'
         await ctx.send(combination)
@@ -118,6 +118,11 @@ class Tools(Cog_Extension):
         for message in prompt:
             texts += message + ' '
         await ctx.reply(file=discord.File(img.generate(texts)))
+
+
+    @commands.command()
+    async def cat(self, ctx: commands.Context, cat: str):
+        await ctx.send(f'https://http.cat/{cat}')
 
 
 
