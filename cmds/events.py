@@ -52,9 +52,10 @@ class Events(Cog_Extension):
 
 
         if mi.IsZhInputs(message.content):
+            zh = mi.ToZH(message.content)
+            await message.reply(zh)
             await message.add_reaction('<:keyboard:854350638918008913>')
-        elif mi.IsZhInputs(message.content + ' '):
-            await message.add_reaction('<:keyboard:854350638918008913>')
+            function.print_detail(memo='INFO', user=message.author, guild=message.guild, channel=message.channel, obj=f'Traslate "{message.content}" to "{zh}"')
 
 
         data = function.open_json('./data/listen.json')
@@ -93,9 +94,9 @@ class Events(Cog_Extension):
                 file.close()
 
             if existing:
-                function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'Add "{message.content}" to an existing conversation')
+                function.print_detail(memo='INFO', user=message.author, guild=message.guild, channel=message.channel, obj=f'Add "{message.content}" to an existing conversation')
             else:
-                function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'Add "{message.content}" to a new conversation')
+                function.print_detail(memo='INFO', user=message.author, guild=message.guild, channel=message.channel, obj=f'Add "{message.content}" to a new conversation')
 
 
         data = function.open_json('./data/talk.json')

@@ -1,3 +1,6 @@
+import requests
+import ast
+
 def IsZhInput(words):
     bpmf = [49, 113, 97, 122, 50, 119, 115, 120, 101, 100, 99, 114, 102, 118, 53, 116, 103, 98, 121, 104, 110]
     iwu = [117, 106, 109]
@@ -47,3 +50,9 @@ def IsZhInputs(words: str) -> int:
             return 4
 
     return 0
+
+
+def ToZH(text) -> str:
+    text = text.replace(" ", "=").replace(",", "%2C")
+    r = requests.get(f'https://inputtools.google.com/request?text={text}&itc=zh-hant-t-i0-und&num=13&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage')
+    return ast.literal_eval(r.text)[1][0][1][0]

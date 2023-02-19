@@ -67,12 +67,11 @@ def print_detail(memo='', user=None, guild=None, channel=None, obj=None) -> None
 
     if user == None:
         user = Formate
-
     if guild == None:
         guild = Formate
-
     if channel == None:
         channel = Formate
+        
 
     def fill(string, length: int) -> str:
         if string == '':
@@ -92,8 +91,10 @@ def print_detail(memo='', user=None, guild=None, channel=None, obj=None) -> None
 
         return string
  
-
-    print(f'{colorama.Style.DIM}[{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}]{colorama.Style.RESET_ALL}{mcolor}[{fill(memo, 5)}]{colorama.Style.RESET_ALL}{colorama.Fore.BLUE}[{fill(f"{user.name}#{user.discriminator}", 20)}({fill(user.id, 19)})][{fill(guild.name, 20)}({fill(guild.id, 19)})][{fill(channel.name, 20)}({fill(channel.id, 19)})]{colorama.Style.RESET_ALL}\n{obj}\n', flush=flush)
+    try:
+        print(f'{colorama.Style.DIM}[{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}]{colorama.Style.RESET_ALL}{mcolor}[{fill(memo, 5)}]{colorama.Style.RESET_ALL}{colorama.Fore.BLUE}[{fill(f"{user.name}#{user.discriminator}", 20)}({fill(user.id, 19)})][{fill(guild.name, 20)}({fill(guild.id, 19)})][{fill(getattr(channel, "name", ""), 20)}({fill(channel.id, 19)})]{colorama.Style.RESET_ALL}\n{obj}\n', flush=flush)
+    except Exception as e:
+        print(e)
 
 
 def split_str_to_list(text: str, size: int) -> list:
