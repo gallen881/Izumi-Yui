@@ -1,5 +1,5 @@
 import requests
-import urllib
+import urllib.parse
 import json
 import core.function as function
 
