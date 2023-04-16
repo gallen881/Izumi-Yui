@@ -58,6 +58,22 @@ class Events(Cog_Extension):
             function.print_detail(memo='INFO', user=message.author, guild=message.guild, channel=message.channel, obj=f'Traslate "{message.content}" to "{zh}"')
 
 
+        data = function.open_json('./data/talk.json')
+        if str(message.channel.id) in data.keys():
+            async with message.channel.typing():
+                if data[str(message.channel.id)] != 'openai':
+                    try:
+                        responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
+                    except:
+                        CmdsTalk.chatbot[data[str(message.channel.id)]] = ChatBot(data[str(message.channel.id)], database_uri=f'sqlite:///data/{data[str(message.channel.id)]}.db')
+                        responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
+                        function.print_detail(memo='WARN', user=message.author, guild=message.guild, channel=message.channel, obj=f'"{data[str(message.channel.id)]}" not found, create a new one')
+                else:
+                    responce = openai.Completion.create(model='text-davinci-003', prompt=message.content, temperature=0.5, max_tokens=60, top_p=0.3, frequency_penalty=0.5, presence_penalty=0.0, echo=True)['choices'][0]['text']
+                await message.channel.send(responce)
+                function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'"{message.content}" bot replied "{responce}"')
+
+
         data = function.open_json('./data/listen.json')
         if message.channel.id in data[str(message.guild.id)]:
             path = f'./chatterbot/chatterbot_corpus/data/local/{str(message.channel.id)}.yml'
@@ -97,22 +113,6 @@ class Events(Cog_Extension):
                 function.print_detail(memo='INFO', user=message.author, guild=message.guild, channel=message.channel, obj=f'Add "{message.content}" to an existing conversation')
             else:
                 function.print_detail(memo='INFO', user=message.author, guild=message.guild, channel=message.channel, obj=f'Add "{message.content}" to a new conversation')
-
-
-        data = function.open_json('./data/talk.json')
-        if str(message.channel.id) in data.keys():
-            async with message.channel.typing():
-                if data[str(message.channel.id)] != 'openai':
-                    try:
-                        responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
-                    except:
-                        CmdsTalk.chatbot[data[str(message.channel.id)]] = ChatBot(data[str(message.channel.id)], database_uri=f'sqlite:///data/{data[str(message.channel.id)]}.db')
-                        responce = CmdsTalk.chatbot[data[str(message.channel.id)]].get_response(message.content)
-                        function.print_detail(memo='WARN', user=message.author, guild=message.guild, channel=message.channel, obj=f'"{data[str(message.channel.id)]}" not found, create a new one')
-                else:
-                    responce = openai.Completion.create(model='text-davinci-003', prompt=message.content, temperature=0.5, max_tokens=60, top_p=0.3, frequency_penalty=0.5, presence_penalty=0.0, echo=True)['choices'][0]['text']
-                await message.channel.send(responce)
-            function.print_detail(memo='INFO',user=message.author, guild=message.guild, channel=message.channel, obj=f'"{message.content}" bot replied "{responce}"')
 
 
     @commands.Cog.listener()
